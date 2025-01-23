@@ -17,7 +17,7 @@ class ScheduleRepositoryImplTest {
 
     @Test
     @Transactional
-    void repositorySaveTest(){
+    void repositorySaveAndFindByIdTest(){
         ScheduleRequestDto scheduleRequestDto = new ScheduleRequestDto();
         scheduleRequestDto.setTodo("할일 테스트");
         scheduleRequestDto.setUsername("테스트 유저");
@@ -25,8 +25,14 @@ class ScheduleRepositoryImplTest {
 
         ScheduleResponseDto scheduleResponseDto = scheduleRepository.saveSchedule(scheduleRequestDto);
 
-        Assertions.assertThat(scheduleResponseDto.getTodo()).isEqualTo(scheduleRequestDto.getTodo());
-        Assertions.assertThat(scheduleResponseDto.getUsername()).isEqualTo(scheduleRequestDto.getUsername());
+        ScheduleResponseDto findScheduleResponseDto = scheduleRepository.findScheduleById(scheduleResponseDto.getId()).get();
+
+        Assertions.assertThat(scheduleResponseDto.getId()).isEqualTo(findScheduleResponseDto.getId());
+        Assertions.assertThat(scheduleResponseDto.getTodo()).isEqualTo(findScheduleResponseDto.getTodo());
+        Assertions.assertThat(scheduleResponseDto.getUsername()).isEqualTo(findScheduleResponseDto.getUsername());
+        Assertions.assertThat(scheduleResponseDto.getCreatedDate()).isEqualTo(findScheduleResponseDto.getCreatedDate());
+        Assertions.assertThat(scheduleResponseDto.getUpdatedDate()).isEqualTo(findScheduleResponseDto.getUpdatedDate());
 
     }
+
 }

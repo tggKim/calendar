@@ -4,7 +4,9 @@ import lombok.RequiredArgsConstructor;
 import org.example.calendar.dto.ScheduleRequestDto;
 import org.example.calendar.dto.ScheduleResponseDto;
 import org.springframework.boot.autoconfigure.batch.BatchProperties;
+import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.jdbc.core.JdbcTemplate;
+import org.springframework.jdbc.core.RowMapper;
 import org.springframework.jdbc.core.namedparam.MapSqlParameterSource;
 import org.springframework.jdbc.core.simple.SimpleJdbcInsert;
 import org.springframework.jdbc.support.GeneratedKeyHolder;
@@ -16,7 +18,9 @@ import java.sql.PreparedStatement;
 import java.sql.Statement;
 import java.time.LocalDate;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
+import java.util.Optional;
 
 @Repository
 @RequiredArgsConstructor
@@ -50,5 +54,33 @@ public class ScheduleRepositoryImpl implements ScheduleRepository{
                 .createdDate(localDate)
                 .updatedDate(localDate)
                 .build();
+    }
+
+    @Override
+    public Optional<ScheduleResponseDto> findScheduleById(Long id){
+        String sql = "select id,todo,username,createdDate,updatedDate from schedule where id = ?";
+
+        //queryForObject()에서 없는 데이터에 대해 접근하려고하면 EmptyResultDataAccessException가 발생한다.
+        try {
+            ScheduleResponseDto scheduleResponseDto = jdbcTemplate.queryForObject(sql, scheduleRowMapper(), id); // queryForObject는 조회하는게 하나일때사용
+            return Optional.of(scheduleResponseDto); // 값이 있으면 실행되는부분, Optional객체에 담아서 반환
+
+        } catch (EmptyResultDataAccessException e) {
+            return Optional.empty(); // 비어있는 Optional객체를 반환
+        }
+
+    }
+
+    // 결과를 ScheduleResponseDto 객체에 매핑하기위한 매퍼관련 함수
+    private RowMapper<ScheduleResponseDto> scheduleRowMapper() { //jdbcTemplate를 사용할때 resultSet을 매핑하기 위해 필요한 로우매퍼
+        return ((rs, rowNum) -> {
+            return ScheduleResponseDto.builder()
+                    .id(rs.getLong("id"))
+                    .todo(rs.getString("todo"))
+                    .username(rs.getString("username"))
+                    .createdDate(rs.getDate("createdDate").toLocalDate())
+                    .updatedDate(rs.getDate("updatedDate").toLocalDate())
+                    .build();
+        });
     }
 }
