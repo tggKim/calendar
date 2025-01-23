@@ -28,6 +28,7 @@ public class ScheduleRepositoryImpl implements ScheduleRepository{
 
     private final JdbcTemplate jdbcTemplate;
 
+    // 저장
     @Override
     public ScheduleResponseDto saveSchedule(ScheduleRequestDto scheduleRequestDto) {
 
@@ -56,6 +57,7 @@ public class ScheduleRepositoryImpl implements ScheduleRepository{
                 .build();
     }
 
+    // 단건 조회해서 있으면 Optional에 담아서 리턴, 없으면 빈 Optional에 담아서 리턴
     @Override
     public Optional<ScheduleResponseDto> findScheduleById(Long id){
         String sql = "select id,todo,username,createdDate,updatedDate from schedule where id = ?";
@@ -71,6 +73,13 @@ public class ScheduleRepositoryImpl implements ScheduleRepository{
 
     }
 
+    // 모든 일정 불러옴 없으면 빈 리스트 반환
+    @Override
+    public List<ScheduleResponseDto> findAllSchedule(){
+        String sql = "select id,todo,username,createdDate,updatedDate from schedule";
+        return jdbcTemplate.query(sql, scheduleRowMapper());
+    }
+
     // 결과를 ScheduleResponseDto 객체에 매핑하기위한 매퍼관련 함수
     private RowMapper<ScheduleResponseDto> scheduleRowMapper() { //jdbcTemplate를 사용할때 resultSet을 매핑하기 위해 필요한 로우매퍼
         return ((rs, rowNum) -> {
@@ -83,4 +92,6 @@ public class ScheduleRepositoryImpl implements ScheduleRepository{
                     .build();
         });
     }
+
+
 }
