@@ -2,16 +2,17 @@ package org.example.calendar.repository;
 
 import org.example.calendar.dto.ScheduleRequestDto;
 import org.example.calendar.dto.ScheduleResponseDto;
+import org.example.calendar.entity.Schedule;
 
 import java.util.List;
 import java.util.Optional;
 
 public interface ScheduleRepository {
-    ScheduleResponseDto saveSchedule(ScheduleRequestDto scheduleRequestDto);
+    Schedule saveSchedule(Schedule schedule);
 
-    public Optional<ScheduleResponseDto> findScheduleById(Long id);
+    public Optional<Schedule> findScheduleById(Long id);
 
-    List<ScheduleResponseDto> findAllSchedule();
+    List<Schedule> findAllSchedule();
 
     int updateSchedulesTodoAndUsername(Long id, String todo, String username);
 }
