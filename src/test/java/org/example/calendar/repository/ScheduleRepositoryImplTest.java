@@ -47,4 +47,22 @@ class ScheduleRepositoryImplTest {
         }
     }
 
+    @Test
+    @Transactional
+    void repositoryUpdateTest(){
+        ScheduleRequestDto scheduleRequestDto = new ScheduleRequestDto();
+        scheduleRequestDto.setTodo("할일 테스트");
+        scheduleRequestDto.setUsername("테스트 유저");
+        scheduleRequestDto.setPassword("testPassword");
+
+        ScheduleResponseDto scheduleResponseDto = scheduleRepository.saveSchedule(scheduleRequestDto);
+
+        scheduleRepository.updateSchedulesTodoAndUsername(scheduleResponseDto.getId(), "할일 업데이트", "이름 업데이트");
+
+        ScheduleResponseDto findScheduleResponseDto = scheduleRepository.findScheduleById(scheduleResponseDto.getId()).get();
+
+        Assertions.assertThat(findScheduleResponseDto.getTodo()).isEqualTo("할일 업데이트");
+        Assertions.assertThat(findScheduleResponseDto.getUsername()).isEqualTo("이름 업데이트");
+    }
+
 }
