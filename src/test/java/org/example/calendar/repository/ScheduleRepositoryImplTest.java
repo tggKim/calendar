@@ -8,6 +8,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.List;
+
 import static org.junit.jupiter.api.Assertions.*;
 
 @SpringBootTest
@@ -15,6 +17,7 @@ class ScheduleRepositoryImplTest {
     @Autowired
     ScheduleRepository scheduleRepository;
 
+    // 저장과 단건 조회 테스트
     @Test
     @Transactional
     void repositorySaveAndFindByIdTest(){
@@ -33,6 +36,15 @@ class ScheduleRepositoryImplTest {
         Assertions.assertThat(scheduleResponseDto.getCreatedDate()).isEqualTo(findScheduleResponseDto.getCreatedDate());
         Assertions.assertThat(scheduleResponseDto.getUpdatedDate()).isEqualTo(findScheduleResponseDto.getUpdatedDate());
 
+    }
+
+    // 모든 일정 조회 테스트
+    @Test
+    void repositoryFindAllTest(){
+        List<ScheduleResponseDto> list = scheduleRepository.findAllSchedule();
+        for(ScheduleResponseDto dto : list){
+            System.out.println(dto.getId()+" "+dto.getTodo()+" "+dto.getUsername()+" "+dto.getCreatedDate()+" "+dto.getUpdatedDate());
+        }
     }
 
 }
