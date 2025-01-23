@@ -3,6 +3,7 @@ package org.example.calendar.repository;
 import lombok.RequiredArgsConstructor;
 import org.example.calendar.dto.ScheduleRequestDto;
 import org.example.calendar.dto.ScheduleResponseDto;
+import org.example.calendar.entity.Schedule;
 import org.springframework.boot.autoconfigure.batch.BatchProperties;
 import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.jdbc.core.JdbcTemplate;
@@ -30,7 +31,7 @@ public class ScheduleRepositoryImpl implements ScheduleRepository{
 
     // 저장
     @Override
-    public ScheduleResponseDto saveSchedule(ScheduleRequestDto scheduleRequestDto) {
+    public Schedule saveSchedule(Schedule schedule) {
 
         LocalDate localDate = LocalDate.now();
 
@@ -38,9 +39,9 @@ public class ScheduleRepositoryImpl implements ScheduleRepository{
         KeyHolder keyHolder = new GeneratedKeyHolder(); // DB에서 직접 생성해준 키값을 받아오기 위해 필요한 keyHolder
         jdbcTemplate.update(connection -> {
             PreparedStatement ps = connection.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS);
-            ps.setString(1, scheduleRequestDto.getTodo());
-            ps.setString(2, scheduleRequestDto.getUsername());
-            ps.setString(3, scheduleRequestDto.getPassword());
+            ps.setString(1, schedule.getTodo());
+            ps.setString(2, schedule.getUsername());
+            ps.setString(3, schedule.getPassword());
             ps.setDate(4, Date.valueOf(localDate));
             ps.setDate(5, Date.valueOf(localDate));
             return ps;
@@ -48,24 +49,24 @@ public class ScheduleRepositoryImpl implements ScheduleRepository{
 
         long key = keyHolder.getKey().longValue(); //그다음 keyHolder를 통해 생성된 키값을 꺼내온다.
 
-        return ScheduleResponseDto.builder()
+        return Schedule.builder()
                 .id(key)
-                .todo(scheduleRequestDto.getTodo())
-                .username(scheduleRequestDto.getUsername())
+                .todo(schedule.getTodo())
+                .username(schedule.getUsername())
                 .createdDate(localDate)
                 .updatedDate(localDate)
                 .build();
     }
 
-    // 단건 조회해서 있으면 Optional에 담아서 리턴, 없으면 빈 Optional에 담아서 리턴
+    // 단건 조회해서 있으면 Optional에 담아서 리턴, 없으면 빈 Optional 리턴
     @Override
-    public Optional<ScheduleResponseDto> findScheduleById(Long id){
+    public Optional<Schedule> findScheduleById(Long id){
         String sql = "select id,todo,username,createdDate,updatedDate from schedule where id = ?";
 
         //queryForObject()에서 없는 데이터에 대해 접근하려고하면 EmptyResultDataAccessException가 발생한다.
         try {
-            ScheduleResponseDto scheduleResponseDto = jdbcTemplate.queryForObject(sql, scheduleRowMapper(), id); // queryForObject는 조회하는게 하나일때사용
-            return Optional.of(scheduleResponseDto); // 값이 있으면 실행되는부분, Optional객체에 담아서 반환
+            Schedule schedule = jdbcTemplate.queryForObject(sql, scheduleRowMapper(), id); // queryForObject는 조회하는게 하나일때사용
+            return Optional.of(schedule); // 값이 있으면 실행되는부분, Optional객체에 담아서 반환
 
         } catch (EmptyResultDataAccessException e) {
             return Optional.empty(); // 비어있는 Optional객체를 반환
@@ -75,15 +76,15 @@ public class ScheduleRepositoryImpl implements ScheduleRepository{
 
     // 모든 일정 불러옴 없으면 빈 리스트 반환
     @Override
-    public List<ScheduleResponseDto> findAllSchedule(){
+    public List<Schedule> findAllSchedule(){
         String sql = "select id,todo,username,createdDate,updatedDate from schedule";
         return jdbcTemplate.query(sql, scheduleRowMapper());
     }
 
     // 결과를 ScheduleResponseDto 객체에 매핑하기위한 매퍼관련 함수
-    private RowMapper<ScheduleResponseDto> scheduleRowMapper() { //jdbcTemplate를 사용할때 resultSet을 매핑하기 위해 필요한 로우매퍼
+    private RowMapper<Schedule> scheduleRowMapper() { //jdbcTemplate를 사용할때 resultSet을 매핑하기 위해 필요한 로우매퍼
         return ((rs, rowNum) -> {
-            return ScheduleResponseDto.builder()
+            return Schedule.builder()
                     .id(rs.getLong("id"))
                     .todo(rs.getString("todo"))
                     .username(rs.getString("username"))
