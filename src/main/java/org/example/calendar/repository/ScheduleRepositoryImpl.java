@@ -93,5 +93,10 @@ public class ScheduleRepositoryImpl implements ScheduleRepository{
         });
     }
 
-
+    // 업데이트하고 해당 컬럼 번호를 리턴, 0을 리턴하면 id에 해당되는 일정이 없는 것
+    @Override
+    public int updateSchedulesTodoAndUsername(Long id, String todo, String username){
+        String sql = "update schedule set todo = ?, username = ?, updatedDate = ? where id = ?";
+        return jdbcTemplate.update(sql, todo, username, Date.valueOf(LocalDate.now()),id);
+    }
 }
