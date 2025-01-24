@@ -4,6 +4,7 @@ import lombok.Builder;
 import lombok.Getter;
 
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 
 @Getter
 public class Schedule {
@@ -11,11 +12,11 @@ public class Schedule {
     private String todo;
     private String username;
     private String password;
-    private LocalDate createdDate;
-    private LocalDate updatedDate;
+    private LocalDateTime createdDate;
+    private LocalDateTime updatedDate;
 
     @Builder
-    public  Schedule(Long id, String todo, String username, String password, LocalDate createdDate, LocalDate updatedDate){
+    public  Schedule(Long id, String todo, String username, String password, LocalDateTime createdDate, LocalDateTime updatedDate){
         this.id = id;
         this.todo = todo;
         this.username = username;

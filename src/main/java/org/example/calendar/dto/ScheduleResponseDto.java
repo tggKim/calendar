@@ -1,18 +1,22 @@
 package org.example.calendar.dto;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
 import lombok.Builder;
 import lombok.Getter;
 import org.example.calendar.entity.Schedule;
 
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 
 @Getter
 public class ScheduleResponseDto {
     private Long id;
     private String todo;
     private String username;
-    private LocalDate createdDate;
-    private LocalDate updatedDate;
+    @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
+    private LocalDateTime createdDate;
+    @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
+    private LocalDateTime updatedDate;
 
     public ScheduleResponseDto(Schedule schedule){
         this.id = schedule.getId();
