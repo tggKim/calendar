@@ -10,6 +10,7 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
+import java.util.Optional;
 
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -86,5 +87,25 @@ class ScheduleRepositoryImplTest {
 
         number = scheduleRepository.deleteScheduleById(savedSchedule.getId());
         Assertions.assertThat(number).isEqualTo(0);
+    }
+
+    // id로 비밀번호 찾기 테스트
+    @Test
+    @Transactional
+    void repositoryFindPasswordTest(){
+        Schedule schedule = Schedule.builder()
+                .todo("삭제 테스트")
+                .username("테스트 유저")
+                .password("testPassword")
+                .build();
+
+        Schedule savedSchedule = scheduleRepository.saveSchedule(schedule);
+
+        String findPassword = scheduleRepository.getUserPasswordById(savedSchedule.getId()).get();
+        Assertions.assertThat(findPassword).isEqualTo(schedule.getPassword());
+
+        scheduleRepository.deleteScheduleById(savedSchedule.getId());
+        Optional<String> findPassword02 = scheduleRepository.getUserPasswordById(savedSchedule.getId());
+        Assertions.assertThat(findPassword02.isEmpty()).isTrue();
     }
 }
