@@ -11,4 +11,6 @@ public interface ScheduleService {
     public Optional<Schedule> findScheduleById(Long id);
 
     List<Schedule> findAllSchedule();
+
+    int updateSchedulesTodoAndUsername(Schedule schedule);
 }
