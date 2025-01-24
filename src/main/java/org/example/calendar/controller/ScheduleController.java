@@ -3,6 +3,8 @@ package org.example.calendar.controller;
 import lombok.RequiredArgsConstructor;
 import org.example.calendar.dto.ScheduleRequestDto;
 import org.example.calendar.dto.ScheduleResponseDto;
+import org.example.calendar.dto.deleteDto.DeleteScheduleRequestDto;
+import org.example.calendar.dto.updateDto.UpdateScheduleRequestDto;
 import org.example.calendar.entity.Schedule;
 import org.example.calendar.service.ScheduleService;
 import org.springframework.http.HttpStatus;
@@ -36,6 +38,25 @@ public class ScheduleController {
         return new ResponseEntity<>(new ScheduleResponseDto(savedSchedule), HttpStatus.OK);
     }
 
-    //@PostMapping
-    //public ResponseEntity<ScheduleResponseDto> updateSchedule(@RequestBody)
+    // 일부 수정이어서 patch 메서드 사용
+    @PatchMapping("/{id}")
+    public ResponseEntity<ScheduleResponseDto> updateSchedule(@PathVariable("id") Long id, @RequestBody UpdateScheduleRequestDto updateScheduleRequestDto){
+        Schedule schedule = Schedule.builder()
+                .id(id)
+                .todo(updateScheduleRequestDto.getTodo())
+                .username(updateScheduleRequestDto.getUsername())
+                .password(updateScheduleRequestDto.getPassword())
+                .build();
+
+        Schedule updatedSchedule = scheduleService.updateSchedulesTodoAndUsername(schedule);
+
+        return new ResponseEntity<>(new ScheduleResponseDto(updatedSchedule), HttpStatus.OK);
+    }
+
+    // 삭제시 요청 메시지 body에 비밀번호를 담아야 해서 post 메서드 사용
+    @PostMapping("/{id}")
+    public ResponseEntity deleteSchedule(@PathVariable("id") Long id, @RequestBody DeleteScheduleRequestDto deleteScheduleRequestDto){
+        scheduleService.deleteScheduleById(id, deleteScheduleRequestDto.getPassword());
+        return new ResponseEntity(HttpStatus.OK);
+    }
 }
