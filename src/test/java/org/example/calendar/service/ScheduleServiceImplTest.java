@@ -54,7 +54,7 @@ class ScheduleServiceImplTest {
 
     @Test
     void findAllScheduleTest(){
-        List<Schedule> schedules = service.findAllSchedule();
+        List<Schedule> schedules = service.findAllSchedule(null,null,null);
         for(Schedule schedule : schedules){
             System.out.println(schedule.getId()+" "+schedule.getTodo()+" "+schedule.getUsername()+" "+schedule.getCreatedDate()+" "+schedule.getUpdatedDate());
         }
