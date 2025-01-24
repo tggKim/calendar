@@ -69,4 +69,22 @@ class ScheduleRepositoryImplTest {
         Assertions.assertThat(findSchedule.getUsername()).isEqualTo("이름 업데이트");
     }
 
+    // 삭제 테스트
+    @Test
+    @Transactional
+    void repositoryDeleteTest(){
+        Schedule schedule = Schedule.builder()
+                .todo("삭제 테스트")
+                .username("테스트 유저")
+                .password("testPassword")
+                .build();
+
+        Schedule savedSchedule = scheduleRepository.saveSchedule(schedule);
+
+        int number = scheduleRepository.deleteScheduleById(savedSchedule.getId());
+        Assertions.assertThat(number).isEqualTo(1);
+
+        number = scheduleRepository.deleteScheduleById(savedSchedule.getId());
+        Assertions.assertThat(number).isEqualTo(0);
+    }
 }
