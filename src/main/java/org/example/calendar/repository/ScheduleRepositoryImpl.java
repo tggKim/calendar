@@ -100,4 +100,11 @@ public class ScheduleRepositoryImpl implements ScheduleRepository{
         String sql = "update schedule set todo = ?, username = ?, updatedDate = ? where id = ?";
         return jdbcTemplate.update(sql, todo, username, Date.valueOf(LocalDate.now()),id);
     }
+
+    // id에 해당하는 일정 삭제
+    @Override
+    public int deleteScheduleById(Long id){
+        String sql = "delete from schedule where id = ?";
+        return jdbcTemplate.update(sql, id);
+    }
 }

@@ -15,4 +15,6 @@ public interface ScheduleRepository {
     List<Schedule> findAllSchedule();
 
     int updateSchedulesTodoAndUsername(Long id, String todo, String username);
+
+    int deleteScheduleById(Long id);
 }
