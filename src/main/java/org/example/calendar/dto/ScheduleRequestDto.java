@@ -9,4 +9,12 @@ public class ScheduleRequestDto {
     private String todo;
     private String username;
     private String password;
+
+    public Schedule toSchedule(){
+        return Schedule.builder()
+                .todo(this.todo)
+                .username(this.username)
+                .password(this.password)
+                .build();
+    }
 }
