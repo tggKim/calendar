@@ -22,6 +22,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
+import java.util.regex.Pattern;
 
 @Repository
 @RequiredArgsConstructor
@@ -76,9 +77,37 @@ public class ScheduleRepositoryImpl implements ScheduleRepository{
 
     // 모든 일정 불러옴 없으면 빈 리스트 반환
     @Override
-    public List<Schedule> findAllSchedule(){
-        String sql = "select id,todo,username,createdDate,updatedDate from schedule";
-        return jdbcTemplate.query(sql, scheduleRowMapper());
+    public List<Schedule> findAllSchedule(String username, String updatedDate, String sort){
+        String sql = "";
+
+        if(username != null && updatedDate == null && sort == null){
+            sql = "select id,todo,username,createdDate,updatedDate from schedule where username = ?";
+            return jdbcTemplate.query(sql, scheduleRowMapper(), username);
+        }
+        else if(username == null && updatedDate != null && sort == null){
+            sql = "select id,todo,username,createdDate,updatedDate from schedule where updatedDate = ?";
+            return jdbcTemplate.query(sql, scheduleRowMapper(), updatedDate);
+        }
+        else if(username != null && updatedDate != null && sort == null){
+            sql = "select id,todo,username,createdDate,updatedDate from schedule where username = ? and updatedDate = ?";
+            return jdbcTemplate.query(sql, scheduleRowMapper(), username, updatedDate);
+        }
+        else if(username == null && updatedDate == null && sort != null){
+            String parse = "^(id|todo|username|createdDate|updatedDate)\\.(ASC|DESC|asc|desc)$";
+            if(Pattern.matches(parse, sort)){
+                String[] strs = sort.split("\\.");
+                sql = "select id,todo,username,createdDate,updatedDate from schedule order by " + strs[0] + " " + strs[1];
+                return jdbcTemplate.query(sql, scheduleRowMapper());
+            }
+
+            sql = "select id,todo,username,createdDate,updatedDate from schedule order by id";
+            return jdbcTemplate.query(sql, scheduleRowMapper());
+        }
+        else{
+            sql = "select id,todo,username,createdDate,updatedDate from schedule order by id";
+            return jdbcTemplate.query(sql, scheduleRowMapper());
+        }
+
     }
 
     // 결과를 ScheduleResponseDto 객체에 매핑하기위한 매퍼관련 함수

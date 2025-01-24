@@ -28,8 +28,13 @@ public class ScheduleController {
     }
 
     @GetMapping
-    public ResponseEntity<List<ScheduleResponseDto>> getSchedules(){
-        return new ResponseEntity<>(scheduleService.findAllSchedule().stream().map(ScheduleResponseDto::new).toList(), HttpStatus.OK);
+    public ResponseEntity<List<ScheduleResponseDto>> getSchedules(
+            @RequestParam(value="username", required = false) String username,
+            @RequestParam(value="updatedDate",required = false) String updatedDate,
+            @RequestParam(value="sort",required = false) String sort
+    ){
+
+        return new ResponseEntity<>(scheduleService.findAllSchedule(username, updatedDate, sort).stream().map(ScheduleResponseDto::new).toList(), HttpStatus.OK);
     }
 
     @PostMapping
@@ -38,7 +43,7 @@ public class ScheduleController {
         return new ResponseEntity<>(new ScheduleResponseDto(savedSchedule), HttpStatus.OK);
     }
 
-    // 일부 수정이어서 patch 메서드 사용
+    // 일부 수정이어서 patch 메서드 사용, 그리고 삭제에서 post 메서드를 사용해서 patch 메서드 사용
     @PatchMapping("/{id}")
     public ResponseEntity<ScheduleResponseDto> updateSchedule(@PathVariable("id") Long id, @RequestBody UpdateScheduleRequestDto updateScheduleRequestDto){
         Schedule schedule = Schedule.builder()

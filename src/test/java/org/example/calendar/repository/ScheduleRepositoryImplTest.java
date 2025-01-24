@@ -44,7 +44,7 @@ class ScheduleRepositoryImplTest {
     // 모든 일정 조회 테스트
     @Test
     void repositoryFindAllTest(){
-        List<Schedule> list = scheduleRepository.findAllSchedule();
+        List<Schedule> list = scheduleRepository.findAllSchedule(null,null,null);
         for(Schedule dto : list){
             System.out.println(dto.getId()+" "+dto.getTodo()+" "+dto.getUsername()+" "+dto.getCreatedDate()+" "+dto.getUpdatedDate());
         }
