@@ -107,4 +107,22 @@ public class ScheduleRepositoryImpl implements ScheduleRepository{
         String sql = "delete from schedule where id = ?";
         return jdbcTemplate.update(sql, id);
     }
+
+    // id에 해당하는 비밀번호를 가져오는 메서드
+    @Override
+    public Optional<String> getUserPasswordById(Long id){
+        String sql = "select password from schedule where id = ?";
+        try{
+            String findPassword = jdbcTemplate.queryForObject(sql, passwordRowMapper(), id);
+            return Optional.of(findPassword);
+        }catch (EmptyResultDataAccessException e){
+            return Optional.empty();
+        }
+    }
+
+    private RowMapper<String> passwordRowMapper() {
+        return ((rs, rowNum) -> {
+            return rs.getString("password");
+        });
+    }
 }
