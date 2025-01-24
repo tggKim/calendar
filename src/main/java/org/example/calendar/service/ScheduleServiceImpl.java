@@ -21,18 +21,17 @@ public class ScheduleServiceImpl implements ScheduleService {
     }
 
     @Override
-    public Optional<Schedule> findScheduleById(Long id) {
-        return scheduleRepository.findScheduleById(id);
+    public Schedule findScheduleById(Long id) {
+        return scheduleRepository.findScheduleById(id).orElseThrow(() -> new NoSuchElementException("id에 해당하는 일정이 없습니다."));
     }
 
     @Override
     public List<Schedule> findAllSchedule() {
-        return List.of();
+        return scheduleRepository.findAllSchedule();
     }
 
     @Override
-    public int updateSchedulesTodoAndUsername(Schedule schedule) {
-
+    public Schedule updateSchedulesTodoAndUsername(Schedule schedule) {
         String findPassword = scheduleRepository.getUserPasswordById(schedule.getId()).orElseThrow(() -> new NoSuchElementException("id에 해당하는 일정이 없습니다."));
 
         if(findPassword.equals(schedule.getPassword())){
@@ -42,8 +41,19 @@ public class ScheduleServiceImpl implements ScheduleService {
             throw new IllegalArgumentException("비밀번호가 잘못되었습니다.");
         }
 
-        return 0;
+        // 무조건 id에 해당하는 일정이  존재하므로 예외 던질 필요 없음
+        return scheduleRepository.findScheduleById(schedule.getId()).get();
     }
 
+    @Override
+    public void deleteScheduleById(Long id, String password) {
+        String findPassword = scheduleRepository.getUserPasswordById(id).orElseThrow(() -> new NoSuchElementException("id에 해당하는 일정이 없습니다."));
 
+        if(findPassword.equals(password)){
+            scheduleRepository.deleteScheduleById(id);
+        }
+        else{
+            throw new IllegalArgumentException("비밀번호가 잘못되었습니다.");
+        }
+    }
 }

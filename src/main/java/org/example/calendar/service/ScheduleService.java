@@ -8,9 +8,11 @@ import java.util.Optional;
 public interface ScheduleService {
     Schedule saveSchedule(Schedule schedule);
 
-    public Optional<Schedule> findScheduleById(Long id);
+    public Schedule findScheduleById(Long id);
 
     List<Schedule> findAllSchedule();
 
-    int updateSchedulesTodoAndUsername(Schedule schedule);
+    Schedule updateSchedulesTodoAndUsername(Schedule schedule);
+
+    void deleteScheduleById(Long id, String password);
 }
