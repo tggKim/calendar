@@ -17,7 +17,9 @@ import org.springframework.stereotype.Repository;
 import java.sql.Date;
 import java.sql.PreparedStatement;
 import java.sql.Statement;
+import java.sql.Timestamp;
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -34,7 +36,7 @@ public class ScheduleRepositoryImpl implements ScheduleRepository{
     @Override
     public Schedule saveSchedule(Schedule schedule) {
 
-        LocalDate localDate = LocalDate.now();
+        LocalDateTime localDateTime = LocalDateTime.now();
 
         String sql = "insert into schedule(todo,username,password,createdDate,updatedDate) values (?,?,?,?,?)";
         KeyHolder keyHolder = new GeneratedKeyHolder(); // DB에서 직접 생성해준 키값을 받아오기 위해 필요한 keyHolder
@@ -43,8 +45,8 @@ public class ScheduleRepositoryImpl implements ScheduleRepository{
             ps.setString(1, schedule.getTodo());
             ps.setString(2, schedule.getUsername());
             ps.setString(3, schedule.getPassword());
-            ps.setDate(4, Date.valueOf(localDate));
-            ps.setDate(5, Date.valueOf(localDate));
+            ps.setTimestamp(4, Timestamp.valueOf(localDateTime));
+            ps.setTimestamp(5, Timestamp.valueOf(localDateTime));
             return ps;
         }, keyHolder);
 
@@ -54,8 +56,8 @@ public class ScheduleRepositoryImpl implements ScheduleRepository{
                 .id(key)
                 .todo(schedule.getTodo())
                 .username(schedule.getUsername())
-                .createdDate(localDate)
-                .updatedDate(localDate)
+                .createdDate(localDateTime)
+                .updatedDate(localDateTime)
                 .build();
     }
 
@@ -78,8 +80,12 @@ public class ScheduleRepositoryImpl implements ScheduleRepository{
     // 모든 일정 불러옴 없으면 빈 리스트 반환
     @Override
     public List<Schedule> findAllSchedule(String username, String updatedDate, String sort){
-        String sql = "";
+        String updateDatePattern = "^\\d{4}-(0[1-9]|1[0-2])-(0[1-9]|[12][0-9]|3[01])$";
+        if(updatedDate != null && !Pattern.matches(updateDatePattern, updatedDate)){
+            throw new IllegalArgumentException("올바르지 않은 날짜 형식입니다.");
+        }
 
+        String sql = "";
         if(username != null && updatedDate == null && sort == null){
             sql = "select id,todo,username,createdDate,updatedDate from schedule where username = ?";
             return jdbcTemplate.query(sql, scheduleRowMapper(), username);
@@ -93,8 +99,8 @@ public class ScheduleRepositoryImpl implements ScheduleRepository{
             return jdbcTemplate.query(sql, scheduleRowMapper(), username, updatedDate);
         }
         else if(username == null && updatedDate == null && sort != null){
-            String parse = "^(id|todo|username|createdDate|updatedDate)\\.(ASC|DESC|asc|desc)$";
-            if(Pattern.matches(parse, sort)){
+            String sortPattern = "^(id|todo|username|createdDate|updatedDate)\\.(ASC|DESC|asc|desc)$";
+            if(Pattern.matches(sortPattern, sort)){
                 String[] strs = sort.split("\\.");
                 sql = "select id,todo,username,createdDate,updatedDate from schedule order by " + strs[0] + " " + strs[1];
                 return jdbcTemplate.query(sql, scheduleRowMapper());
@@ -117,8 +123,8 @@ public class ScheduleRepositoryImpl implements ScheduleRepository{
                     .id(rs.getLong("id"))
                     .todo(rs.getString("todo"))
                     .username(rs.getString("username"))
-                    .createdDate(rs.getDate("createdDate").toLocalDate())
-                    .updatedDate(rs.getDate("updatedDate").toLocalDate())
+                    .createdDate(rs.getTimestamp("createdDate").toLocalDateTime())
+                    .updatedDate(rs.getTimestamp("updatedDate").toLocalDateTime())
                     .build();
         });
     }
@@ -127,7 +133,7 @@ public class ScheduleRepositoryImpl implements ScheduleRepository{
     @Override
     public int updateSchedulesTodoAndUsername(Long id, String todo, String username){
         String sql = "update schedule set todo = ?, username = ?, updatedDate = ? where id = ?";
-        return jdbcTemplate.update(sql, todo, username, Date.valueOf(LocalDate.now()),id);
+        return jdbcTemplate.update(sql, todo, username, LocalDateTime.now(), id);
     }
 
     // id에 해당하는 일정 삭제
