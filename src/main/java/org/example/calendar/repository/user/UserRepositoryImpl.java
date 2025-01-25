@@ -42,6 +42,7 @@ public class UserRepositoryImpl implements UserRepository{
         return User.builder()
                 .userId(key)
                 .username(user.getUsername())
+                .email(user.getEmail())
                 .createdDate(localDateTime)
                 .updatedDate(localDateTime)
                 .build();
@@ -50,8 +51,13 @@ public class UserRepositoryImpl implements UserRepository{
     // userId로 유저가 존재하는지 판단하는 메서드
     @Override
     public boolean existsByUserId(Long userId) {
-        String sql = "select exists (select 1 from user where userId = ?)";
-        return Boolean.TRUE.equals(jdbcTemplate.queryForObject(sql, Boolean.class, userId));
+        String sql = "select userId from user where userId = ?";
+        try{
+            jdbcTemplate.queryForObject(sql, Long.class, userId);
+            return true;
+        }catch (EmptyResultDataAccessException e){;
+            return false;
+        }
     }
 
 }
