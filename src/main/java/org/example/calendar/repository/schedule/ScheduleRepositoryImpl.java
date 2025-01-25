@@ -29,12 +29,12 @@ public class ScheduleRepositoryImpl implements ScheduleRepository {
 
         LocalDateTime localDateTime = LocalDateTime.now().withNano(0);
 
-        String sql = "insert into schedule(todo,username,password,createdDate,updatedDate) values (?,?,?,?,?)";
+        String sql = "insert into schedule(todo,userId,password,createdDate,updatedDate) values (?,?,?,?,?)";
         KeyHolder keyHolder = new GeneratedKeyHolder(); // DB에서 직접 생성해준 키값을 받아오기 위해 필요한 keyHolder
         jdbcTemplate.update(connection -> {
             PreparedStatement ps = connection.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS);
             ps.setString(1, schedule.getTodo());
-            ps.setString(2, schedule.getUsername());
+            ps.setLong(2, schedule.getUserId());
             ps.setString(3, schedule.getPassword());
             ps.setTimestamp(4, Timestamp.valueOf(localDateTime));
             ps.setTimestamp(5, Timestamp.valueOf(localDateTime));
@@ -46,7 +46,7 @@ public class ScheduleRepositoryImpl implements ScheduleRepository {
         return Schedule.builder()
                 .id(key)
                 .todo(schedule.getTodo())
-                .username(schedule.getUsername())
+                .userId(schedule.getUserId())
                 .createdDate(localDateTime)
                 .updatedDate(localDateTime)
                 .build();
@@ -55,7 +55,7 @@ public class ScheduleRepositoryImpl implements ScheduleRepository {
     // 단건 조회해서 있으면 Optional에 담아서 리턴, 없으면 빈 Optional 리턴
     @Override
     public Optional<Schedule> findScheduleById(Long id){
-        String sql = "select id,todo,username,createdDate,updatedDate from schedule where id = ?";
+        String sql = "select id,todo,userId,createdDate,updatedDate from schedule where id = ?";
 
         //queryForObject()에서 없는 데이터에 대해 접근하려고하면 EmptyResultDataAccessException가 발생한다.
         try {
@@ -78,30 +78,30 @@ public class ScheduleRepositoryImpl implements ScheduleRepository {
 
         String sql = "";
         if(username != null && updatedDate == null && sort == null){
-            sql = "select id,todo,username,createdDate,updatedDate from schedule where username = ?";
+            sql = "select id,todo,userId,createdDate,updatedDate from schedule where username = ?";
             return jdbcTemplate.query(sql, scheduleRowMapper(), username);
         }
         else if(username == null && updatedDate != null && sort == null){
-            sql = "select id,todo,username,createdDate,updatedDate from schedule where updatedDate = ?";
+            sql = "select id,todo,userId,createdDate,updatedDate from schedule where updatedDate = ?";
             return jdbcTemplate.query(sql, scheduleRowMapper(), updatedDate);
         }
         else if(username != null && updatedDate != null && sort == null){
-            sql = "select id,todo,username,createdDate,updatedDate from schedule where username = ? and updatedDate = ?";
+            sql = "select id,todo,userId,createdDate,updatedDate from schedule where username = ? and updatedDate = ?";
             return jdbcTemplate.query(sql, scheduleRowMapper(), username, updatedDate);
         }
         else if(username == null && updatedDate == null && sort != null){
             String sortPattern = "^(id|todo|username|createdDate|updatedDate)\\.(ASC|DESC|asc|desc)$";
             if(Pattern.matches(sortPattern, sort)){
                 String[] strs = sort.split("\\.");
-                sql = "select id,todo,username,createdDate,updatedDate from schedule order by " + strs[0] + " " + strs[1];
+                sql = "select id,todo,userId,createdDate,updatedDate from schedule order by " + strs[0] + " " + strs[1];
                 return jdbcTemplate.query(sql, scheduleRowMapper());
             }
 
-            sql = "select id,todo,username,createdDate,updatedDate from schedule order by id";
+            sql = "select id,todo,userId,createdDate,updatedDate from schedule order by id";
             return jdbcTemplate.query(sql, scheduleRowMapper());
         }
         else{
-            sql = "select id,todo,username,createdDate,updatedDate from schedule order by id";
+            sql = "select id,todo,userId,createdDate,updatedDate from schedule order by id";
             return jdbcTemplate.query(sql, scheduleRowMapper());
         }
 
@@ -113,7 +113,7 @@ public class ScheduleRepositoryImpl implements ScheduleRepository {
             return Schedule.builder()
                     .id(rs.getLong("id"))
                     .todo(rs.getString("todo"))
-                    .username(rs.getString("username"))
+                    .userId(rs.getLong("userId"))
                     .createdDate(rs.getTimestamp("createdDate").toLocalDateTime())
                     .updatedDate(rs.getTimestamp("updatedDate").toLocalDateTime())
                     .build();
@@ -122,9 +122,9 @@ public class ScheduleRepositoryImpl implements ScheduleRepository {
 
     // 업데이트하고 해당 컬럼 번호를 리턴, 0을 리턴하면 id에 해당되는 일정이 없는 것
     @Override
-    public int updateSchedulesTodoAndUsername(Long id, String todo, String username){
-        String sql = "update schedule set todo = ?, username = ?, updatedDate = ? where id = ?";
-        return jdbcTemplate.update(sql, todo, username, LocalDateTime.now(), id);
+    public int updateSchedulesTodo(Long id, String todo){
+        String sql = "update schedule set todo = ?, updatedDate = ? where id = ?";
+        return jdbcTemplate.update(sql, todo, LocalDateTime.now(), id);
     }
 
     // id에 해당하는 일정 삭제

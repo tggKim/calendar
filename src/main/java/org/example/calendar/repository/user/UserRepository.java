@@ -8,4 +8,6 @@ public interface UserRepository {
     User saveUser(User user);
 
     boolean existsByUserId(Long userId);
+
+    Optional<String> getUsernameById(Long userId);
 }

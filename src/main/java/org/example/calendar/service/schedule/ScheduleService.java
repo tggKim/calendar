@@ -11,7 +11,7 @@ public interface ScheduleService {
 
     List<Schedule> findAllSchedule(String username, String updatedDate, String sort);
 
-    Schedule updateSchedulesTodoAndUsername(Schedule schedule);
+    Schedule updateSchedulesTodo(Schedule schedule);
 
     void deleteScheduleById(Long id, String password);
 }

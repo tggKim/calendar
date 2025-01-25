@@ -12,7 +12,7 @@ public interface ScheduleRepository {
 
     List<Schedule> findAllSchedule(String username, String updatedDate, String sort);
 
-    int updateSchedulesTodoAndUsername(Long id, String todo, String username);
+    int updateSchedulesTodo(Long id, String todo);
 
     int deleteScheduleById(Long id);
 
