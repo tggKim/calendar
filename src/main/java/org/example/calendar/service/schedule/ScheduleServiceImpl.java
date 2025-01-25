@@ -30,11 +30,11 @@ public class ScheduleServiceImpl implements ScheduleService {
     }
 
     @Override
-    public Schedule updateSchedulesTodoAndUsername(Schedule schedule) {
+    public Schedule updateSchedulesTodo(Schedule schedule) {
         String findPassword = scheduleRepository.getUserPasswordById(schedule.getId()).orElseThrow(() -> new NoSuchElementException("id에 해당하는 일정이 없습니다."));
 
         if(findPassword.equals(schedule.getPassword())){
-            scheduleRepository.updateSchedulesTodoAndUsername(schedule.getId(), schedule.getTodo(), schedule.getUsername());
+            scheduleRepository.updateSchedulesTodo(schedule.getId(), schedule.getTodo());
         }
         else{
             throw new IllegalArgumentException("비밀번호가 잘못되었습니다.");

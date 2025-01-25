@@ -60,4 +60,14 @@ public class UserRepositoryImpl implements UserRepository{
         }
     }
 
+    @Override
+    public Optional<String> getUsernameById(Long userId) {
+        String sql = "select username from user where userId = ?";
+        try{
+            return Optional.of(jdbcTemplate.queryForObject(sql, String.class, userId));
+        }catch (EmptyResultDataAccessException e){;
+            return Optional.empty();
+        }
+    }
+
 }
