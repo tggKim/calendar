@@ -2,12 +2,11 @@ package org.example.calendar.service;
 
 import lombok.RequiredArgsConstructor;
 import org.example.calendar.entity.Schedule;
-import org.example.calendar.repository.ScheduleRepository;
+import org.example.calendar.repository.schedule.ScheduleRepository;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
 import java.util.NoSuchElementException;
-import java.util.Optional;
 
 @Service
 @RequiredArgsConstructor

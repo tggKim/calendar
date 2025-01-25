@@ -1,7 +1,5 @@
-package org.example.calendar.repository;
+package org.example.calendar.repository.schedule;
 
-import org.example.calendar.dto.ScheduleRequestDto;
-import org.example.calendar.dto.ScheduleResponseDto;
 import org.example.calendar.entity.Schedule;
 
 import java.util.List;

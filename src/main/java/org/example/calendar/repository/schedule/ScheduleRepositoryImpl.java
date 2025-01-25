@@ -1,34 +1,25 @@
-package org.example.calendar.repository;
+package org.example.calendar.repository.schedule;
 
 import lombok.RequiredArgsConstructor;
-import org.example.calendar.dto.ScheduleRequestDto;
-import org.example.calendar.dto.ScheduleResponseDto;
 import org.example.calendar.entity.Schedule;
-import org.springframework.boot.autoconfigure.batch.BatchProperties;
 import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.RowMapper;
-import org.springframework.jdbc.core.namedparam.MapSqlParameterSource;
-import org.springframework.jdbc.core.simple.SimpleJdbcInsert;
 import org.springframework.jdbc.support.GeneratedKeyHolder;
 import org.springframework.jdbc.support.KeyHolder;
 import org.springframework.stereotype.Repository;
 
-import java.sql.Date;
 import java.sql.PreparedStatement;
 import java.sql.Statement;
 import java.sql.Timestamp;
-import java.time.LocalDate;
 import java.time.LocalDateTime;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 import java.util.Optional;
 import java.util.regex.Pattern;
 
 @Repository
 @RequiredArgsConstructor
-public class ScheduleRepositoryImpl implements ScheduleRepository{
+public class ScheduleRepositoryImpl implements ScheduleRepository {
 
     private final JdbcTemplate jdbcTemplate;
 

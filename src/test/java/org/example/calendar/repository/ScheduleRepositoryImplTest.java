@@ -1,9 +1,8 @@
 package org.example.calendar.repository;
 
 import org.assertj.core.api.Assertions;
-import org.example.calendar.dto.ScheduleRequestDto;
-import org.example.calendar.dto.ScheduleResponseDto;
 import org.example.calendar.entity.Schedule;
+import org.example.calendar.repository.schedule.ScheduleRepository;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -11,8 +10,6 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 import java.util.Optional;
-
-import static org.junit.jupiter.api.Assertions.*;
 
 @SpringBootTest
 class ScheduleRepositoryImplTest {
