@@ -36,7 +36,7 @@ public class ScheduleRepositoryImpl implements ScheduleRepository{
     @Override
     public Schedule saveSchedule(Schedule schedule) {
 
-        LocalDateTime localDateTime = LocalDateTime.now();
+        LocalDateTime localDateTime = LocalDateTime.now().withNano(0);
 
         String sql = "insert into schedule(todo,username,password,createdDate,updatedDate) values (?,?,?,?,?)";
         KeyHolder keyHolder = new GeneratedKeyHolder(); // DB에서 직접 생성해준 키값을 받아오기 위해 필요한 keyHolder
