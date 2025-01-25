@@ -16,6 +16,7 @@ class UserRepositoryImplTest {
     @Autowired
     UserRepository repository;
 
+    // 저장하고 저장된 userId를 통해서 찾는 걸 검증한다.
     @Test
     @Transactional
     void userSaveTest(){
