@@ -1,4 +1,4 @@
-package org.example.calendar.service;
+package org.example.calendar.service.schedule;
 
 import lombok.RequiredArgsConstructor;
 import org.example.calendar.entity.Schedule;

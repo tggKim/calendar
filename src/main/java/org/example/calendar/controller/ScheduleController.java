@@ -6,7 +6,7 @@ import org.example.calendar.dto.ScheduleResponseDto;
 import org.example.calendar.dto.deleteDto.DeleteScheduleRequestDto;
 import org.example.calendar.dto.updateDto.UpdateScheduleRequestDto;
 import org.example.calendar.entity.Schedule;
-import org.example.calendar.service.ScheduleService;
+import org.example.calendar.service.schedule.ScheduleService;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;

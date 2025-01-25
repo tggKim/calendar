@@ -1,9 +1,8 @@
-package org.example.calendar.service;
+package org.example.calendar.service.schedule;
 
 import org.example.calendar.entity.Schedule;
 
 import java.util.List;
-import java.util.Optional;
 
 public interface ScheduleService {
     Schedule saveSchedule(Schedule schedule);

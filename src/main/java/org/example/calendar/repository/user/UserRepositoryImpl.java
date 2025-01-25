@@ -26,7 +26,7 @@ public class UserRepositoryImpl implements UserRepository{
     public User saveUser(User user) {
         LocalDateTime localDateTime = LocalDateTime.now().withNano(0);
 
-        String sql = "insert into schedule(username,email,createdDate,updatedDate) values (?,?,?,?)";
+        String sql = "insert into user(username,email,createdDate,updatedDate) values (?,?,?,?)";
         KeyHolder keyHolder = new GeneratedKeyHolder(); // DB에서 직접 생성해준 키값을 받아오기 위해 필요한 keyHolder
         jdbcTemplate.update(connection -> {
             PreparedStatement ps = connection.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS);
@@ -47,23 +47,11 @@ public class UserRepositoryImpl implements UserRepository{
                 .build();
     }
 
+    // userId로 유저가 존재하는지 판단하는 메서드
     @Override
-    public Optional<String> findUsernameById(Long userId) {
-        String sql = "select id,todo,username,createdDate,updatedDate from schedule where id = ?";
-
-        //queryForObject()에서 없는 데이터에 대해 접근하려고하면 EmptyResultDataAccessException가 발생한다.
-        try {
-            String username = jdbcTemplate.queryForObject(sql, userRowMapper(), userId); // queryForObject는 조회하는게 하나일때사용
-            return Optional.of(username); // 값이 있으면 실행되는부분, Optional객체에 담아서 반환
-
-        } catch (EmptyResultDataAccessException e) {
-            return Optional.empty(); // 비어있는 Optional객체를 반환
-        }
+    public boolean existsByUserId(Long userId) {
+        String sql = "select exists (select 1 from user where userId = ?)";
+        return Boolean.TRUE.equals(jdbcTemplate.queryForObject(sql, Boolean.class, userId));
     }
 
-    private RowMapper<String> userRowMapper() { //jdbcTemplate를 사용할때 resultSet을 매핑하기 위해 필요한 로우매퍼
-        return ((rs, rowNum) -> {
-            return rs.getString("username");
-        });
-    }
 }

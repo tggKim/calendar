@@ -2,6 +2,7 @@ package org.example.calendar.service;
 
 import org.assertj.core.api.Assertions;
 import org.example.calendar.entity.Schedule;
+import org.example.calendar.service.schedule.ScheduleService;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -10,7 +11,6 @@ import org.springframework.transaction.annotation.Transactional;
 import java.util.List;
 import java.util.NoSuchElementException;
 
-import static org.junit.jupiter.api.Assertions.*;
 @SpringBootTest
 class ScheduleServiceImplTest {
     @Autowired
