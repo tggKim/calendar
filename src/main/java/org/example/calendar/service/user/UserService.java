@@ -7,7 +7,5 @@ public interface UserService {
 
     String getUsernameByUserId(Long userId);
 
-    boolean existByUserId(Long userId);
-
     void updateUsername(Long userId, String username);
 }

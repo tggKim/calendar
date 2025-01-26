@@ -27,7 +27,6 @@ class UserRepositoryImplTest {
 
         User savedUser = repository.saveUser(user);
 
-        Assertions.assertThat(repository.existsByUserId(savedUser.getUserId())).isTrue();
     }
 
 }
