@@ -9,7 +9,7 @@ public interface ScheduleService {
 
     public Schedule findScheduleById(Long id);
 
-    boolean validatePassword(Schedule schedule);
+    boolean validatePassword(Long id, String password);
 
     List<Schedule> findAllSchedule(Long userId, String updatedDate, String sort);
 
