@@ -7,13 +7,13 @@ import org.example.calendar.entity.Schedule;
 @Getter @Setter
 public class ScheduleRequestDto {
     private String todo;
-    private String username;
+    private Long userId;
     private String password;
 
     public Schedule toSchedule(){
         return Schedule.builder()
                 .todo(this.todo)
-                .username(this.username)
+                .userId(this.userId)
                 .password(this.password)
                 .build();
     }

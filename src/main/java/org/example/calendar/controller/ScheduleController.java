@@ -48,22 +48,24 @@ public class ScheduleController {
         return new ResponseEntity<>(scheduleService.findAllSchedule(userId, updatedDate, sort).stream().map(ScheduleResponseDto::new).toList(), HttpStatus.OK);
     }
 
-//    @PostMapping
-//    public ResponseEntity<ScheduleResponseDto> saveSchedule(@RequestBody ScheduleRequestDto scheduleRequestDto){
-//        Schedule savedSchedule = scheduleService.saveSchedule(scheduleRequestDto.toSchedule());
-//
-//        String username = userService.getUsernameById(savedSchedule.getUserId());
-//
-//        ScheduleResponseDto scheduleResponseDto = ScheduleResponseDto.builder()
-//                .id(savedSchedule.getId())
-//                .todo(savedSchedule.getTodo())
-//                .username(username)
-//                .createdDate(savedSchedule.getCreatedDate())
-//                .updatedDate(savedSchedule.getUpdatedDate())
-//                .build();
-//
-//        return new ResponseEntity<>(scheduleResponseDto, HttpStatus.OK);
-//    }
+    @PostMapping
+    public ResponseEntity<ScheduleResponseDto> saveSchedule(@RequestBody ScheduleRequestDto scheduleRequestDto){
+
+        // 유저 이름을 가져오면서 userId에 해당하는 유저가 존재하는지 확인
+        String username = userService.getUsernameByUserId(scheduleRequestDto.getUserId());
+
+        Schedule savedSchedule = scheduleService.saveSchedule(scheduleRequestDto.toSchedule());
+
+        ScheduleResponseDto scheduleResponseDto = ScheduleResponseDto.builder()
+                .id(savedSchedule.getId())
+                .todo(savedSchedule.getTodo())
+                .username(username)
+                .createdDate(savedSchedule.getCreatedDate())
+                .updatedDate(savedSchedule.getUpdatedDate())
+                .build();
+
+        return new ResponseEntity<>(scheduleResponseDto, HttpStatus.OK);
+    }
 //
 //    // 일부 수정이어서 patch 메서드 사용, 그리고 삭제에서 post 메서드를 사용해서 patch 메서드 사용
 //    @PatchMapping("/{id}")

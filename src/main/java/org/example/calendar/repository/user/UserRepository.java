@@ -7,8 +7,6 @@ import java.util.Optional;
 public interface UserRepository {
     User saveUser(User user);
 
-    boolean existsByUserId(Long userId);
-
     int updateUsername(Long userId, String username);
 
     Optional<String> getUsernameByUserId(Long userId);

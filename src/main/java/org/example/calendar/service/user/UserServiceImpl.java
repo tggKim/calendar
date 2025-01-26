@@ -24,14 +24,6 @@ public class UserServiceImpl implements UserService{
     }
 
     @Override
-    public boolean existByUserId(Long userId) {
-        if(!userRepository.existsByUserId(userId)){
-            throw new NoSuchElementException("userId에 해당하는 유저가 없습니다.");
-        }
-        return true;
-    }
-
-    @Override
     public void updateUsername(Long userId, String username) {
         userRepository.updateUsername(userId, username);
     }

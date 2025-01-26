@@ -82,11 +82,11 @@ public class ScheduleRepositoryImpl implements ScheduleRepository {
             return jdbcTemplate.query(sql, scheduleRowMapper(), userId);
         }
         else if(userId == null && updatedDate != null && sort == null){
-            sql = "select s.id, s.todo, s.userId, u.username, s.createdDate, s.updatedDate from schedule s inner join user u on s.userId = u.userId where s.updatedDate = ?";
+            sql = "select s.id, s.todo, s.userId, u.username, s.createdDate, s.updatedDate from schedule s inner join user u on s.userId = u.userId where date(s.updatedDate) = ?";
             return jdbcTemplate.query(sql, scheduleRowMapper(), updatedDate);
         }
         else if(userId != null && updatedDate != null && sort == null){
-            sql = "select s.id, s.todo, s.userId, u.username, s.createdDate, s.updatedDate from schedule s inner join user u on s.userId = u.userId where s.userId = ? and s.updatedDate = ?";
+            sql = "select s.id, s.todo, s.userId, u.username, s.createdDate, s.updatedDate from schedule s inner join user u on s.userId = u.userId where s.userId = ? and date(s.updatedDate) = ?";
             return jdbcTemplate.query(sql, scheduleRowMapper(), userId, updatedDate);
         }
         else if(userId == null && updatedDate == null && sort != null){

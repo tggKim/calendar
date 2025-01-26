@@ -48,18 +48,6 @@ public class UserRepositoryImpl implements UserRepository{
                 .build();
     }
 
-    // userId로 유저가 존재하는지 판단하는 메서드
-    @Override
-    public boolean existsByUserId(Long userId) {
-        String sql = "select userId from user where userId = ?";
-        try{
-            jdbcTemplate.queryForObject(sql, Long.class, userId);
-            return true;
-        }catch (EmptyResultDataAccessException e){;
-            return false;
-        }
-    }
-
     @Override
     public Optional<String> getUsernameByUserId(Long userId) {
         String sql = "select username from user where userId = ?";
