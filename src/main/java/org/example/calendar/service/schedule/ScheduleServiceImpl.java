@@ -25,34 +25,34 @@ public class ScheduleServiceImpl implements ScheduleService {
     }
 
     @Override
-    public List<Schedule> findAllSchedule(String username, String updatedDate, String sort) {
-        return scheduleRepository.findAllSchedule(username,updatedDate,sort);
+    public List<Schedule> findAllSchedule(Long userId, String updatedDate, String sort) {
+        return scheduleRepository.findAllSchedule(userId, updatedDate, sort);
     }
 
     @Override
-    public Schedule updateSchedulesTodo(Schedule schedule) {
-        String findPassword = scheduleRepository.getUserPasswordById(schedule.getId()).orElseThrow(() -> new NoSuchElementException("id에 해당하는 일정이 없습니다."));
-
-        if(findPassword.equals(schedule.getPassword())){
-            scheduleRepository.updateSchedulesTodo(schedule.getId(), schedule.getTodo());
-        }
-        else{
-            throw new IllegalArgumentException("비밀번호가 잘못되었습니다.");
-        }
-
-        // 무조건 id에 해당하는 일정이  존재하므로 예외 던질 필요 없음
-        return scheduleRepository.findScheduleById(schedule.getId()).get();
+    public void updateSchedulesTodo(Schedule schedule) {
+        scheduleRepository.updateSchedulesTodo(schedule.getId(), schedule.getTodo());
     }
 
     @Override
-    public void deleteScheduleById(Long id, String password) {
-        String findPassword = scheduleRepository.getUserPasswordById(id).orElseThrow(() -> new NoSuchElementException("id에 해당하는 일정이 없습니다."));
+    public boolean validatePassword(Schedule schedule){
+        String findPassword = scheduleRepository.getPasswordById(schedule.getId()).orElseThrow(() -> new NoSuchElementException("id에 해당하는 일정이 없습니다."));
 
-        if(findPassword.equals(password)){
-            scheduleRepository.deleteScheduleById(id);
-        }
-        else{
+        if(!findPassword.equals(schedule.getPassword())){
             throw new IllegalArgumentException("비밀번호가 잘못되었습니다.");
         }
+
+        return true;
     }
+
+    @Override
+    public Long getUserIdById(Long id) {
+        return scheduleRepository.getUserIdById(id).orElseThrow(() -> new NoSuchElementException("id에 해당하는 일정이 없습니다."));
+    }
+
+    @Override
+    public void deleteScheduleById(Long id) {
+        scheduleRepository.deleteScheduleById(id);
+    }
+
 }

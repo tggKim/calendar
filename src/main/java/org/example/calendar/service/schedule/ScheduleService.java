@@ -9,9 +9,13 @@ public interface ScheduleService {
 
     public Schedule findScheduleById(Long id);
 
-    List<Schedule> findAllSchedule(String username, String updatedDate, String sort);
+    boolean validatePassword(Schedule schedule);
 
-    Schedule updateSchedulesTodo(Schedule schedule);
+    List<Schedule> findAllSchedule(Long userId, String updatedDate, String sort);
 
-    void deleteScheduleById(Long id, String password);
+    void updateSchedulesTodo(Schedule schedule);
+
+    void deleteScheduleById(Long id);
+
+    Long getUserIdById(Long id);
 }

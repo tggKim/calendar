@@ -18,6 +18,15 @@ public class ScheduleResponseDto {
     @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
     private LocalDateTime updatedDate;
 
+    @Builder
+    public ScheduleResponseDto(Long id, String todo, String username, LocalDateTime createdDate, LocalDateTime updatedDate){
+        this.id = id;
+        this.todo = todo;
+        this.username = username;
+        this.createdDate = createdDate;
+        this.updatedDate = updatedDate;
+    }
+
     public ScheduleResponseDto(Schedule schedule){
         this.id = schedule.getId();
         this.todo = schedule.getTodo();

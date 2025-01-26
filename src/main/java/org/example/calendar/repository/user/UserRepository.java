@@ -9,5 +9,7 @@ public interface UserRepository {
 
     boolean existsByUserId(Long userId);
 
-    Optional<String> getUsernameById(Long userId);
+    int updateUsername(Long userId, String username);
+
+    Optional<String> getUsernameByUserId(Long userId);
 }
