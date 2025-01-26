@@ -61,7 +61,7 @@ public class UserRepositoryImpl implements UserRepository{
 
     @Override
     public int updateUsername(Long userId, String username){
-        String sql = "update schedule set username = ?, updatedDate = ? where userId = ?";
+        String sql = "update user set username = ?, updatedDate = ? where userId = ?";
         return jdbcTemplate.update(sql, username, LocalDateTime.now(), userId);
     }
 
