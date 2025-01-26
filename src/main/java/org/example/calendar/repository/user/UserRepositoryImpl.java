@@ -61,13 +61,20 @@ public class UserRepositoryImpl implements UserRepository{
     }
 
     @Override
-    public Optional<String> getUsernameById(Long userId) {
+    public Optional<String> getUsernameByUserId(Long userId) {
         String sql = "select username from user where userId = ?";
         try{
-            return Optional.of(jdbcTemplate.queryForObject(sql, String.class, userId));
+            String username = jdbcTemplate.queryForObject(sql, String.class, userId);
+            return Optional.of(username);
         }catch (EmptyResultDataAccessException e){;
             return Optional.empty();
         }
+    }
+
+    @Override
+    public int updateUsername(Long userId, String username){
+        String sql = "update schedule set username = ?, updatedDate = ? where userId = ?";
+        return jdbcTemplate.update(sql, username, LocalDateTime.now(), userId);
     }
 
 }

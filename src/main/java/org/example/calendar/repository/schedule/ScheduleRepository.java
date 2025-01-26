@@ -10,11 +10,13 @@ public interface ScheduleRepository {
 
     public Optional<Schedule> findScheduleById(Long id);
 
-    List<Schedule> findAllSchedule(String username, String updatedDate, String sort);
+    List<Schedule> findAllSchedule(Long userId, String updatedDate, String sort);
 
     int updateSchedulesTodo(Long id, String todo);
 
     int deleteScheduleById(Long id);
 
-    Optional<String> getUserPasswordById(Long id);
+    Optional<String> getPasswordById(Long id);
+
+    Optional<Long> getUserIdById(Long id);
 }

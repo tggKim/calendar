@@ -55,7 +55,7 @@ public class ScheduleRepositoryImpl implements ScheduleRepository {
     // 단건 조회해서 있으면 Optional에 담아서 리턴, 없으면 빈 Optional 리턴
     @Override
     public Optional<Schedule> findScheduleById(Long id){
-        String sql = "select id,todo,userId,createdDate,updatedDate from schedule where id = ?";
+        String sql = "select s.id, s.todo, s.userId, u.username, s.createdDate, s.updatedDate from schedule s inner join user u on s.userId = u.userId where s.id = ?";
 
         //queryForObject()에서 없는 데이터에 대해 접근하려고하면 EmptyResultDataAccessException가 발생한다.
         try {
@@ -70,38 +70,38 @@ public class ScheduleRepositoryImpl implements ScheduleRepository {
 
     // 모든 일정 불러옴 없으면 빈 리스트 반환
     @Override
-    public List<Schedule> findAllSchedule(String username, String updatedDate, String sort){
+    public List<Schedule> findAllSchedule(Long userId, String updatedDate, String sort){
         String updateDatePattern = "^\\d{4}-(0[1-9]|1[0-2])-(0[1-9]|[12][0-9]|3[01])$";
         if(updatedDate != null && !Pattern.matches(updateDatePattern, updatedDate)){
             throw new IllegalArgumentException("올바르지 않은 날짜 형식입니다.");
         }
 
         String sql = "";
-        if(username != null && updatedDate == null && sort == null){
-            sql = "select id,todo,userId,createdDate,updatedDate from schedule where username = ?";
-            return jdbcTemplate.query(sql, scheduleRowMapper(), username);
+        if(userId != null && updatedDate == null && sort == null){
+            sql = "select s.id, s.todo, s.userId, u.username, s.createdDate, s.updatedDate from schedule s inner join user u on s.userId = u.userId where s.userId = ?";
+            return jdbcTemplate.query(sql, scheduleRowMapper(), userId);
         }
-        else if(username == null && updatedDate != null && sort == null){
-            sql = "select id,todo,userId,createdDate,updatedDate from schedule where updatedDate = ?";
+        else if(userId == null && updatedDate != null && sort == null){
+            sql = "select s.id, s.todo, s.userId, u.username, s.createdDate, s.updatedDate from schedule s inner join user u on s.userId = u.userId where s.updatedDate = ?";
             return jdbcTemplate.query(sql, scheduleRowMapper(), updatedDate);
         }
-        else if(username != null && updatedDate != null && sort == null){
-            sql = "select id,todo,userId,createdDate,updatedDate from schedule where username = ? and updatedDate = ?";
-            return jdbcTemplate.query(sql, scheduleRowMapper(), username, updatedDate);
+        else if(userId != null && updatedDate != null && sort == null){
+            sql = "select s.id, s.todo, s.userId, u.username, s.createdDate, s.updatedDate from schedule s inner join user u on s.userId = u.userId where s.userId = ? and s.updatedDate = ?";
+            return jdbcTemplate.query(sql, scheduleRowMapper(), userId, updatedDate);
         }
-        else if(username == null && updatedDate == null && sort != null){
-            String sortPattern = "^(id|todo|username|createdDate|updatedDate)\\.(ASC|DESC|asc|desc)$";
+        else if(userId == null && updatedDate == null && sort != null){
+            String sortPattern = "^(id|todo|createdDate|updatedDate)\\.(ASC|DESC|asc|desc)$";
             if(Pattern.matches(sortPattern, sort)){
                 String[] strs = sort.split("\\.");
-                sql = "select id,todo,userId,createdDate,updatedDate from schedule order by " + strs[0] + " " + strs[1];
+                sql = "select s.id, s.todo, s.userId, u.username, s.createdDate, s.updatedDate from schedule s inner join user u on s.userId = u.userId order by " + strs[0] + " " + strs[1];
                 return jdbcTemplate.query(sql, scheduleRowMapper());
             }
 
-            sql = "select id,todo,userId,createdDate,updatedDate from schedule order by id";
+            sql = "select s.id, s.todo, s.userId, u.username, s.createdDate, s.updatedDate from schedule s inner join user u on s.userId = u.userId order by s.id";
             return jdbcTemplate.query(sql, scheduleRowMapper());
         }
         else{
-            sql = "select id,todo,userId,createdDate,updatedDate from schedule order by id";
+            sql = "select s.id, s.todo, s.userId, u.username, s.createdDate, s.updatedDate from schedule s inner join user u on s.userId = u.userId order by s.id";
             return jdbcTemplate.query(sql, scheduleRowMapper());
         }
 
@@ -114,6 +114,7 @@ public class ScheduleRepositoryImpl implements ScheduleRepository {
                     .id(rs.getLong("id"))
                     .todo(rs.getString("todo"))
                     .userId(rs.getLong("userId"))
+                    .username(rs.getString("username"))
                     .createdDate(rs.getTimestamp("createdDate").toLocalDateTime())
                     .updatedDate(rs.getTimestamp("updatedDate").toLocalDateTime())
                     .build();
@@ -136,7 +137,7 @@ public class ScheduleRepositoryImpl implements ScheduleRepository {
 
     // id에 해당하는 비밀번호를 가져오는 메서드
     @Override
-    public Optional<String> getUserPasswordById(Long id){
+    public Optional<String> getPasswordById(Long id){
         String sql = "select password from schedule where id = ?";
         try{
             String findPassword = jdbcTemplate.queryForObject(sql, passwordRowMapper(), id);
@@ -150,5 +151,16 @@ public class ScheduleRepositoryImpl implements ScheduleRepository {
         return ((rs, rowNum) -> {
             return rs.getString("password");
         });
+    }
+
+    @Override
+    public Optional<Long> getUserIdById(Long id) {
+        String sql = "select userId from schedule where id = ?";
+        try{
+            Long findUserId = jdbcTemplate.queryForObject(sql, Long.class, id);
+            return Optional.of(findUserId);
+        }catch (EmptyResultDataAccessException e){;
+            return Optional.empty();
+        }
     }
 }
