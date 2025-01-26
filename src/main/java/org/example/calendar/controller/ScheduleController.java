@@ -66,22 +66,37 @@ public class ScheduleController {
 
         return new ResponseEntity<>(scheduleResponseDto, HttpStatus.OK);
     }
-//
-//    // 일부 수정이어서 patch 메서드 사용, 그리고 삭제에서 post 메서드를 사용해서 patch 메서드 사용
-//    @PatchMapping("/{id}")
-//    public ResponseEntity<ScheduleResponseDto> updateSchedule(@PathVariable("id") Long id, @RequestBody UpdateScheduleRequestDto updateScheduleRequestDto){
-//        Schedule schedule = Schedule.builder()
-//                .id(id)
-//                .todo(updateScheduleRequestDto.getTodo())
-//                .username(updateScheduleRequestDto.getUsername())
-//                .password(updateScheduleRequestDto.getPassword())
-//                .build();
-//
-//        Schedule updatedSchedule = scheduleService.updateSchedulesTodoAndUsername(schedule);
-//
-//        return new ResponseEntity<>(new ScheduleResponseDto(updatedSchedule), HttpStatus.OK);
-//    }
-//
+
+    // 일부 수정이어서 patch 메서드 사용, 그리고 삭제에서 post 메서드를 사용해서 patch 메서드 사용
+    @PatchMapping("/{id}")
+    public ResponseEntity<ScheduleResponseDto> updateSchedule(@PathVariable("id") Long id, @RequestBody UpdateScheduleRequestDto updateScheduleRequestDto){
+
+        // 일정이 존재하는지 비밀번호가 일치하는지 검증
+        scheduleService.validatePassword(id, updateScheduleRequestDto.getPassword());
+
+        // 일정의 userId를 가져옴
+        Long userId = scheduleService.getUserIdById(id);
+
+        // 유저의 이름 업데이트
+        userService.updateUsername(userId, updateScheduleRequestDto.getUsername());
+
+        // 일정의 todo 업데이트
+        scheduleService.updateSchedulesTodo(id, updateScheduleRequestDto.getTodo());
+
+        // 업데이트된 일정 가져옴
+        Schedule findSchedule = scheduleService.findScheduleById(id);
+
+        ScheduleResponseDto scheduleResponseDto = ScheduleResponseDto.builder()
+                .id(findSchedule.getId())
+                .todo(findSchedule.getTodo())
+                .username(findSchedule.getUsername())
+                .createdDate(findSchedule.getCreatedDate())
+                .updatedDate(findSchedule.getUpdatedDate())
+                .build();
+
+        return new ResponseEntity<>(scheduleResponseDto, HttpStatus.OK);
+    }
+
     // 삭제시 요청 메시지 body에 비밀번호를 담아야 해서 post 메서드 사용
     @PostMapping("/{id}")
     public ResponseEntity deleteSchedule(@PathVariable("id") Long id, @RequestBody DeleteScheduleRequestDto deleteScheduleRequestDto){

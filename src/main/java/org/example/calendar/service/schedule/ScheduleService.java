@@ -13,7 +13,7 @@ public interface ScheduleService {
 
     List<Schedule> findAllSchedule(Long userId, String updatedDate, String sort);
 
-    void updateSchedulesTodo(Schedule schedule);
+    void updateSchedulesTodo(Long id, String todo);
 
     void deleteScheduleById(Long id);
 

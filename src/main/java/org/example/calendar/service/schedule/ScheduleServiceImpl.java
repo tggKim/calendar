@@ -30,8 +30,8 @@ public class ScheduleServiceImpl implements ScheduleService {
     }
 
     @Override
-    public void updateSchedulesTodo(Schedule schedule) {
-        scheduleRepository.updateSchedulesTodo(schedule.getId(), schedule.getTodo());
+    public void updateSchedulesTodo(Long id, String todo) {
+        scheduleRepository.updateSchedulesTodo(id, todo);
     }
 
     @Override
