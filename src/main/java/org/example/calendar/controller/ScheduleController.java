@@ -82,10 +82,17 @@ public class ScheduleController {
 //        return new ResponseEntity<>(new ScheduleResponseDto(updatedSchedule), HttpStatus.OK);
 //    }
 //
-//    // 삭제시 요청 메시지 body에 비밀번호를 담아야 해서 post 메서드 사용
-//    @PostMapping("/{id}")
-//    public ResponseEntity deleteSchedule(@PathVariable("id") Long id, @RequestBody DeleteScheduleRequestDto deleteScheduleRequestDto){
-//        scheduleService.deleteScheduleById(id, deleteScheduleRequestDto.getPassword());
-//        return new ResponseEntity(HttpStatus.OK);
-//    }
+    // 삭제시 요청 메시지 body에 비밀번호를 담아야 해서 post 메서드 사용
+    @PostMapping("/{id}")
+    public ResponseEntity deleteSchedule(@PathVariable("id") Long id, @RequestBody DeleteScheduleRequestDto deleteScheduleRequestDto){
+
+        // 일정이 존재하는지, 비밀번호가 일치하는지 검증
+        scheduleService.validatePassword(id, deleteScheduleRequestDto.getPassword());
+
+        // 일정 삭제
+        scheduleService.deleteScheduleById(id);
+
+        return new ResponseEntity(HttpStatus.OK);
+
+    }
 }

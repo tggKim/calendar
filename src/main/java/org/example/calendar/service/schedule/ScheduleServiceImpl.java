@@ -35,10 +35,10 @@ public class ScheduleServiceImpl implements ScheduleService {
     }
 
     @Override
-    public boolean validatePassword(Schedule schedule){
-        String findPassword = scheduleRepository.getPasswordById(schedule.getId()).orElseThrow(() -> new NoSuchElementException("id에 해당하는 일정이 없습니다."));
+    public boolean validatePassword(Long id, String password){
+        String findPassword = scheduleRepository.getPasswordById(id).orElseThrow(() -> new NoSuchElementException("id에 해당하는 일정이 없습니다."));
 
-        if(!findPassword.equals(schedule.getPassword())){
+        if(!findPassword.equals(password)){
             throw new IllegalArgumentException("비밀번호가 잘못되었습니다.");
         }
 
