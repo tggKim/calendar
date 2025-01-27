@@ -19,6 +19,11 @@ public class UserServiceImpl implements UserService{
     }
 
     @Override
+    public User findUserById(Long userId) {
+        return userRepository.findUserById(userId).orElseThrow(() -> new NoSuchElementException("userId에 해당하는 유저가 없습니다."));
+    }
+
+    @Override
     public String getUsernameByUserId(Long userId) {
         return userRepository.getUsernameByUserId(userId).orElseThrow(() -> new NoSuchElementException("userId에 해당하는 유저가 없습니다."));
     }

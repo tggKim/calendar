@@ -1,10 +1,9 @@
-package org.example.calendar.service;
+package org.example.calendar.service.schedule;
 
 import org.assertj.core.api.Assertions;
 import org.example.calendar.entity.Schedule;
 import org.example.calendar.entity.User;
 import org.example.calendar.repository.user.UserRepository;
-import org.example.calendar.service.schedule.ScheduleService;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
