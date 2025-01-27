@@ -2,7 +2,9 @@ package org.example.calendar.repository;
 
 import org.assertj.core.api.Assertions;
 import org.example.calendar.entity.Schedule;
+import org.example.calendar.entity.User;
 import org.example.calendar.repository.schedule.ScheduleRepository;
+import org.example.calendar.repository.user.UserRepository;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -16,13 +18,24 @@ class ScheduleRepositoryImplTest {
     @Autowired
     ScheduleRepository scheduleRepository;
 
+    @Autowired
+    UserRepository userRepository;
+
     // 저장과 단건 조회 테스트
     @Test
     @Transactional
     void repositorySaveAndFindByIdTest(){
+
+        User user = User.builder()
+                .username("테스트 유저")
+                .email("rl123456@hanmail.net")
+                .build();
+
+        User savedUser = userRepository.saveUser(user);
+
         Schedule schedule = Schedule.builder()
                 .todo("할일 테스트")
-                .username("테스트 유저")
+                .userId(savedUser.getUserId())
                 .password("testPassword")
                 .build();
 
@@ -32,7 +45,7 @@ class ScheduleRepositoryImplTest {
 
         Assertions.assertThat(savedSchedule.getId()).isEqualTo(findSchedule.getId());
         Assertions.assertThat(savedSchedule.getTodo()).isEqualTo(findSchedule.getTodo());
-        Assertions.assertThat(savedSchedule.getUsername()).isEqualTo(findSchedule.getUsername());
+        Assertions.assertThat(savedSchedule.getUserId()).isEqualTo(findSchedule.getUserId());
         Assertions.assertThat(savedSchedule.getCreatedDate()).isEqualTo(findSchedule.getCreatedDate());
         Assertions.assertThat(savedSchedule.getUpdatedDate()).isEqualTo(findSchedule.getUpdatedDate());
 
@@ -43,37 +56,51 @@ class ScheduleRepositoryImplTest {
     void repositoryFindAllTest(){
         List<Schedule> list = scheduleRepository.findAllSchedule(null,null,null);
         for(Schedule dto : list){
-            System.out.println(dto.getId()+" "+dto.getTodo()+" "+dto.getUsername()+" "+dto.getCreatedDate()+" "+dto.getUpdatedDate());
+            System.out.println(dto.getId()+" "+dto.getTodo()+" "+dto.getUserId()+" "+dto.getUsername()+" "+dto.getCreatedDate()+" "+dto.getUpdatedDate());
         }
     }
 
-    // 업데이트 테스트
+    // todo 업데이트 테스트
     @Test
     @Transactional
     void repositoryUpdateTest(){
+
+        User user = User.builder()
+                .username("테스트 유저")
+                .email("rl123456@hanmail.net")
+                .build();
+
+        User savedUser = userRepository.saveUser(user);
+
         Schedule schedule = Schedule.builder()
                 .todo("할일 테스트")
-                .username("테스트 유저")
+                .userId(savedUser.getUserId())
                 .password("testPassword")
                 .build();
 
         Schedule savedschedule = scheduleRepository.saveSchedule(schedule);
 
-        scheduleRepository.updateSchedulesTodoAndUsername(savedschedule.getId(), "할일 업데이트", "이름 업데이트");
+        scheduleRepository.updateSchedulesTodo(savedschedule.getId(), "할일 업데이트");
 
         Schedule findSchedule = scheduleRepository.findScheduleById(savedschedule.getId()).get();
 
         Assertions.assertThat(findSchedule.getTodo()).isEqualTo("할일 업데이트");
-        Assertions.assertThat(findSchedule.getUsername()).isEqualTo("이름 업데이트");
     }
 
     // 삭제 테스트
     @Test
     @Transactional
     void repositoryDeleteTest(){
+        User user = User.builder()
+                .username("테스트 유저")
+                .email("rl123456@hanmail.net")
+                .build();
+
+        User savedUser = userRepository.saveUser(user);
+
         Schedule schedule = Schedule.builder()
                 .todo("삭제 테스트")
-                .username("테스트 유저")
+                .userId(savedUser.getUserId())
                 .password("testPassword")
                 .build();
 
@@ -90,19 +117,49 @@ class ScheduleRepositoryImplTest {
     @Test
     @Transactional
     void repositoryFindPasswordTest(){
-        Schedule schedule = Schedule.builder()
-                .todo("삭제 테스트")
+        User user = User.builder()
                 .username("테스트 유저")
+                .email("rl123456@hanmail.net")
+                .build();
+
+        User savedUser = userRepository.saveUser(user);
+
+        Schedule schedule = Schedule.builder()
+                .todo("비밀번호 테스트")
+                .userId(savedUser.getUserId())
                 .password("testPassword")
                 .build();
 
         Schedule savedSchedule = scheduleRepository.saveSchedule(schedule);
 
-        String findPassword = scheduleRepository.getUserPasswordById(savedSchedule.getId()).get();
+        String findPassword = scheduleRepository.getPasswordById(savedSchedule.getId()).get();
         Assertions.assertThat(findPassword).isEqualTo(schedule.getPassword());
 
         scheduleRepository.deleteScheduleById(savedSchedule.getId());
-        Optional<String> findPassword02 = scheduleRepository.getUserPasswordById(savedSchedule.getId());
+        Optional<String> findPassword02 = scheduleRepository.getPasswordById(savedSchedule.getId());
         Assertions.assertThat(findPassword02.isEmpty()).isTrue();
+    }
+
+    // id로 userId 찾기 테스트
+    @Test
+    @Transactional
+    void repositoryFindUserIdTest(){
+        User user = User.builder()
+                .username("테스트 유저")
+                .email("rl123456@hanmail.net")
+                .build();
+
+        User savedUser = userRepository.saveUser(user);
+
+        Schedule schedule = Schedule.builder()
+                .todo("userId찾기 테스트")
+                .userId(savedUser.getUserId())
+                .password("testPassword")
+                .build();
+
+        Schedule savedSchedule = scheduleRepository.saveSchedule(schedule);
+
+        Schedule findSchedule = scheduleRepository.findScheduleById(savedSchedule.getId()).get();
+        Assertions.assertThat(findSchedule.getUserId()).isEqualTo(savedUser.getUserId());
     }
 }
