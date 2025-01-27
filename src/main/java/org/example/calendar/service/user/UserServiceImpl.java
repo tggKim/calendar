@@ -2,6 +2,8 @@ package org.example.calendar.service.user;
 
 import lombok.RequiredArgsConstructor;
 import org.example.calendar.entity.User;
+import org.example.calendar.error.ErrorCode;
+import org.example.calendar.exception.Exception404;
 import org.example.calendar.repository.user.UserRepository;
 import org.springframework.stereotype.Service;
 
@@ -20,12 +22,12 @@ public class UserServiceImpl implements UserService{
 
     @Override
     public User findUserById(Long userId) {
-        return userRepository.findUserById(userId).orElseThrow(() -> new NoSuchElementException("userId에 해당하는 유저가 없습니다."));
+        return userRepository.findUserById(userId).orElseThrow(() -> new Exception404(ErrorCode.USER_NOT_FOUND));
     }
 
     @Override
     public String getUsernameByUserId(Long userId) {
-        return userRepository.getUsernameByUserId(userId).orElseThrow(() -> new NoSuchElementException("userId에 해당하는 유저가 없습니다."));
+        return userRepository.getUsernameByUserId(userId).orElseThrow(() -> new Exception404(ErrorCode.USER_NOT_FOUND));
     }
 
     @Override
