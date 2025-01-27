@@ -2,6 +2,7 @@ package org.example.calendar.service.schedule;
 
 import lombok.RequiredArgsConstructor;
 import org.example.calendar.entity.Schedule;
+import org.example.calendar.exception.PasswordInvalidException;
 import org.example.calendar.page.Paging;
 import org.example.calendar.repository.schedule.ScheduleRepository;
 import org.springframework.stereotype.Service;
@@ -61,7 +62,7 @@ public class ScheduleServiceImpl implements ScheduleService {
         String findPassword = scheduleRepository.getPasswordById(id).orElseThrow(() -> new NoSuchElementException("id에 해당하는 일정이 없습니다."));
 
         if(!findPassword.equals(password)){
-            throw new IllegalArgumentException("비밀번호가 잘못되었습니다.");
+            throw new PasswordInvalidException();
         }
 
         return true;
