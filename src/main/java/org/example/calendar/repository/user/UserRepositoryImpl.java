@@ -49,6 +49,33 @@ public class UserRepositoryImpl implements UserRepository{
     }
 
     @Override
+    public Optional<User> findUserById(Long userId) {
+        String sql = "select userId,username,email,createdDate,updatedDate from user where userId = ?";
+
+        //queryForObject()에서 없는 데이터에 대해 접근하려고하면 EmptyResultDataAccessException가 발생한다.
+        try {
+            User user = jdbcTemplate.queryForObject(sql, scheduleRowMapper(), userId); // queryForObject는 조회하는게 하나일때사용
+            return Optional.of(user); // 값이 있으면 실행되는부분, Optional객체에 담아서 반환
+
+        } catch (EmptyResultDataAccessException e) {
+            return Optional.empty(); // 비어있는 Optional객체를 반환
+        }
+    }
+
+    // 결과를 ScheduleResponseDto 객체에 매핑하기위한 매퍼관련 함수
+    private RowMapper<User> scheduleRowMapper() { //jdbcTemplate를 사용할때 resultSet을 매핑하기 위해 필요한 로우매퍼
+        return ((rs, rowNum) -> {
+            return User.builder()
+                    .userId(rs.getLong("userId"))
+                    .username(rs.getString("username"))
+                    .email(rs.getString("email"))
+                    .createdDate(rs.getTimestamp("createdDate").toLocalDateTime())
+                    .updatedDate(rs.getTimestamp("updatedDate").toLocalDateTime())
+                    .build();
+        });
+    }
+
+    @Override
     public Optional<String> getUsernameByUserId(Long userId) {
         String sql = "select username from user where userId = ?";
         try{
