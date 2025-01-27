@@ -6,6 +6,7 @@ import org.example.calendar.dto.schedule.ScheduleResponseDto;
 import org.example.calendar.dto.schedule.deleteDto.DeleteScheduleRequestDto;
 import org.example.calendar.dto.schedule.updateDto.UpdateScheduleRequestDto;
 import org.example.calendar.entity.Schedule;
+import org.example.calendar.page.Paging;
 import org.example.calendar.service.schedule.ScheduleService;
 import org.example.calendar.service.user.UserService;
 import org.springframework.http.HttpStatus;
@@ -42,10 +43,11 @@ public class ScheduleController {
     public ResponseEntity<List<ScheduleResponseDto>> getSchedules(
             @RequestParam(value="userId", required = false) Long userId,
             @RequestParam(value="updatedDate",required = false) String updatedDate,
-            @RequestParam(value="sort",required = false) String sort
+            @RequestParam(value="sort",required = false) String sort,
+            @ModelAttribute("Paging") Paging paging
     ){
 
-        return new ResponseEntity<>(scheduleService.findAllSchedule(userId, updatedDate, sort).stream().map(ScheduleResponseDto::new).toList(), HttpStatus.OK);
+        return new ResponseEntity<>(scheduleService.findAllSchedule(userId, updatedDate, sort, paging).stream().map(ScheduleResponseDto::new).toList(), HttpStatus.OK);
     }
 
     @PostMapping

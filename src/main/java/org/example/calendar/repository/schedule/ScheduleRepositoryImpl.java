@@ -2,6 +2,7 @@ package org.example.calendar.repository.schedule;
 
 import lombok.RequiredArgsConstructor;
 import org.example.calendar.entity.Schedule;
+import org.example.calendar.page.Paging;
 import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.RowMapper;
@@ -70,40 +71,31 @@ public class ScheduleRepositoryImpl implements ScheduleRepository {
 
     // 모든 일정 불러옴 없으면 빈 리스트 반환
     @Override
-    public List<Schedule> findAllSchedule(Long userId, String updatedDate, String sort){
-        String updateDatePattern = "^\\d{4}-(0[1-9]|1[0-2])-(0[1-9]|[12][0-9]|3[01])$";
-        if(updatedDate != null && !Pattern.matches(updateDatePattern, updatedDate)){
-            throw new IllegalArgumentException("올바르지 않은 날짜 형식입니다.");
+    public List<Schedule> findAllSchedule(Long userId, String updatedDate, String sort, Paging paging){
+
+        String sql = "select s.id, s.todo, s.userId, u.username, s.createdDate, s.updatedDate from schedule s inner join user u on s.userId = u.userId";
+
+        if(userId != null && updatedDate == null){
+            sql += " where s.userId = " + userId;
+        }
+        else if(updatedDate != null && userId == null){
+            sql += " where date(s.updatedDate) = \'" + updatedDate + "\'";
+        }
+        else if(userId != null && updatedDate != null){
+            sql += " where s.userId = " + userId + " and date(s.updatedDate) = \'" + updatedDate +"\'";
         }
 
-        String sql = "";
-        if(userId != null && updatedDate == null && sort == null){
-            sql = "select s.id, s.todo, s.userId, u.username, s.createdDate, s.updatedDate from schedule s inner join user u on s.userId = u.userId where s.userId = ?";
-            return jdbcTemplate.query(sql, scheduleRowMapper(), userId);
+        if(sort != null){
+            String[] strs = sort.split("\\.");
+            sql += " order by " + strs[0] + " " + strs[1];
         }
-        else if(userId == null && updatedDate != null && sort == null){
-            sql = "select s.id, s.todo, s.userId, u.username, s.createdDate, s.updatedDate from schedule s inner join user u on s.userId = u.userId where date(s.updatedDate) = ?";
-            return jdbcTemplate.query(sql, scheduleRowMapper(), updatedDate);
-        }
-        else if(userId != null && updatedDate != null && sort == null){
-            sql = "select s.id, s.todo, s.userId, u.username, s.createdDate, s.updatedDate from schedule s inner join user u on s.userId = u.userId where s.userId = ? and date(s.updatedDate) = ?";
-            return jdbcTemplate.query(sql, scheduleRowMapper(), userId, updatedDate);
-        }
-        else if(userId == null && updatedDate == null && sort != null){
-            String sortPattern = "^(id|todo|createdDate|updatedDate)\\.(ASC|DESC|asc|desc)$";
-            if(Pattern.matches(sortPattern, sort)){
-                String[] strs = sort.split("\\.");
-                sql = "select s.id, s.todo, s.userId, u.username, s.createdDate, s.updatedDate from schedule s inner join user u on s.userId = u.userId order by " + strs[0] + " " + strs[1];
-                return jdbcTemplate.query(sql, scheduleRowMapper());
-            }
 
-            sql = "select s.id, s.todo, s.userId, u.username, s.createdDate, s.updatedDate from schedule s inner join user u on s.userId = u.userId order by s.id";
-            return jdbcTemplate.query(sql, scheduleRowMapper());
+        if(paging.getPage() != null && paging.getSize() != null){
+            sql += " limit " + paging.getSize() + " offset " + (paging.getPage() - 1) * paging.getSize();
         }
-        else{
-            sql = "select s.id, s.todo, s.userId, u.username, s.createdDate, s.updatedDate from schedule s inner join user u on s.userId = u.userId order by s.id";
-            return jdbcTemplate.query(sql, scheduleRowMapper());
-        }
+
+        System.out.println(sql);
+        return jdbcTemplate.query(sql,scheduleRowMapper());
 
     }
 
