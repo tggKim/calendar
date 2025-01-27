@@ -2,7 +2,9 @@ package org.example.calendar.service.schedule;
 
 import lombok.RequiredArgsConstructor;
 import org.example.calendar.entity.Schedule;
-import org.example.calendar.exception.PasswordInvalidException;
+import org.example.calendar.error.ErrorCode;
+import org.example.calendar.exception.Exception401;
+import org.example.calendar.exception.Exception404;
 import org.example.calendar.page.Paging;
 import org.example.calendar.repository.schedule.ScheduleRepository;
 import org.springframework.stereotype.Service;
@@ -24,7 +26,7 @@ public class ScheduleServiceImpl implements ScheduleService {
 
     @Override
     public Schedule findScheduleById(Long id) {
-        return scheduleRepository.findScheduleById(id).orElseThrow(() -> new NoSuchElementException("id에 해당하는 일정이 없습니다."));
+        return scheduleRepository.findScheduleById(id).orElseThrow(() -> new Exception404(ErrorCode.SCHEDULE_NOT_FOUND));
     }
 
     @Override
@@ -59,10 +61,10 @@ public class ScheduleServiceImpl implements ScheduleService {
 
     @Override
     public boolean validatePassword(Long id, String password){
-        String findPassword = scheduleRepository.getPasswordById(id).orElseThrow(() -> new NoSuchElementException("id에 해당하는 일정이 없습니다."));
+        String findPassword = scheduleRepository.getPasswordById(id).orElseThrow(() -> new Exception404(ErrorCode.SCHEDULE_NOT_FOUND));
 
         if(!findPassword.equals(password)){
-            throw new PasswordInvalidException();
+            throw new Exception401(ErrorCode.INVALID_PASSWORD);
         }
 
         return true;
@@ -70,7 +72,7 @@ public class ScheduleServiceImpl implements ScheduleService {
 
     @Override
     public Long getUserIdById(Long id) {
-        return scheduleRepository.getUserIdById(id).orElseThrow(() -> new NoSuchElementException("id에 해당하는 일정이 없습니다."));
+        return scheduleRepository.getUserIdById(id).orElseThrow(() -> new Exception404(ErrorCode.SCHEDULE_NOT_FOUND));
     }
 
     @Override

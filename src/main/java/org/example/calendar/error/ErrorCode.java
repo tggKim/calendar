@@ -4,7 +4,11 @@ import org.springframework.http.HttpStatus;
 
 public enum ErrorCode {
 
-    INVALID_PASSWORD("비밀번호가 잘못되었습니다.", HttpStatus.UNAUTHORIZED);
+    // 401 에러
+    INVALID_PASSWORD("비밀번호가 잘못되었습니다.", HttpStatus.UNAUTHORIZED),
+
+    // 404 에러
+    SCHEDULE_NOT_FOUND("id에 해당하는 일정이 없습니다.", HttpStatus.NOT_FOUND);
 
     private String message;
     private HttpStatus httpStatus;
