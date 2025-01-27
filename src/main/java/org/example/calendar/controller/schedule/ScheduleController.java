@@ -1,10 +1,10 @@
-package org.example.calendar.controller;
+package org.example.calendar.controller.schedule;
 
 import lombok.RequiredArgsConstructor;
-import org.example.calendar.dto.ScheduleRequestDto;
-import org.example.calendar.dto.ScheduleResponseDto;
-import org.example.calendar.dto.deleteDto.DeleteScheduleRequestDto;
-import org.example.calendar.dto.updateDto.UpdateScheduleRequestDto;
+import org.example.calendar.dto.schedule.ScheduleRequestDto;
+import org.example.calendar.dto.schedule.ScheduleResponseDto;
+import org.example.calendar.dto.schedule.deleteDto.DeleteScheduleRequestDto;
+import org.example.calendar.dto.schedule.updateDto.UpdateScheduleRequestDto;
 import org.example.calendar.entity.Schedule;
 import org.example.calendar.service.schedule.ScheduleService;
 import org.example.calendar.service.user.UserService;

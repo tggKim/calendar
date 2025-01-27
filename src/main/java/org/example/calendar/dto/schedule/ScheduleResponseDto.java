@@ -1,11 +1,10 @@
-package org.example.calendar.dto;
+package org.example.calendar.dto.schedule;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
 import lombok.Builder;
 import lombok.Getter;
 import org.example.calendar.entity.Schedule;
 
-import java.time.LocalDate;
 import java.time.LocalDateTime;
 
 @Getter
