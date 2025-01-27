@@ -6,6 +6,10 @@ import org.springframework.web.bind.annotation.RestControllerAdvice;
 
 @RestControllerAdvice
 public class ExceptionController {
+    @ExceptionHandler
+    protected ResponseEntity<String> handleException400(Exception400 ex){
+        return new ResponseEntity<>(ex.getErrorCode().getMessage(), ex.getErrorCode().getHttpStatus());
+    }
 
     @ExceptionHandler
     protected ResponseEntity<String> handleException401(Exception401 ex){
@@ -16,4 +20,5 @@ public class ExceptionController {
     protected ResponseEntity<String> handleException404(Exception404 ex){
         return new ResponseEntity<>(ex.getErrorCode().getMessage(), ex.getErrorCode().getHttpStatus());
     }
+
 }
