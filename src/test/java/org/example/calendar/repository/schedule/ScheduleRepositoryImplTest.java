@@ -3,6 +3,7 @@ package org.example.calendar.repository.schedule;
 import org.assertj.core.api.Assertions;
 import org.example.calendar.entity.Schedule;
 import org.example.calendar.entity.User;
+import org.example.calendar.page.Paging;
 import org.example.calendar.repository.user.UserRepository;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -53,7 +54,7 @@ class ScheduleRepositoryImplTest {
     // 모든 일정 조회 테스트
     @Test
     void repositoryFindAllTest(){
-        List<Schedule> list = scheduleRepository.findAllSchedule(null,null,null);
+        List<Schedule> list = scheduleRepository.findAllSchedule(null,null,null,new Paging());
         for(Schedule dto : list){
             System.out.println(dto.getId()+" "+dto.getTodo()+" "+dto.getUserId()+" "+dto.getUsername()+" "+dto.getCreatedDate()+" "+dto.getUpdatedDate());
         }
