@@ -3,6 +3,7 @@ package org.example.calendar.service.schedule;
 import lombok.RequiredArgsConstructor;
 import org.example.calendar.entity.Schedule;
 import org.example.calendar.error.ErrorCode;
+import org.example.calendar.exception.Exception400;
 import org.example.calendar.exception.Exception401;
 import org.example.calendar.exception.Exception404;
 import org.example.calendar.page.Paging;
@@ -35,19 +36,19 @@ public class ScheduleServiceImpl implements ScheduleService {
         // 날짜 형식 검증
         String updateDatePattern = "^\\d{4}-(0[1-9]|1[0-2])-(0[1-9]|[12][0-9]|3[01])$";
         if(updatedDate != null && !Pattern.matches(updateDatePattern, updatedDate)){
-            throw new IllegalArgumentException("올바르지 않은 날짜 형식입니다.");
+            throw new Exception400(ErrorCode.INVALID_DATE_FORMAT);
         }
 
         // sort 형식 검증
         String sortPattern = "^(id|todo|createdDate|updatedDate)\\.(ASC|DESC|asc|desc)$";
         if(sort != null && !Pattern.matches(sortPattern, sort)){
-            throw new IllegalArgumentException("정렬 형식이 올바르지 않습니다.");
+            throw new Exception400(ErrorCode.INVALID_SORT_FORMAT);
         }
 
         // 페이징 형식 검증
         if(paging.getPage() != null && paging.getSize() != null){
             if(paging.getPage() <= 0 || paging.getSize() < 0){
-                throw new IllegalArgumentException("페이징 형식이 올바르지 않습니다. size는 -1보다 크고, page는 1이상 입니다.");
+                throw new Exception400(ErrorCode.INVALID_PAGING_FORMAT);
             }
         }
 
