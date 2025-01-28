@@ -1,5 +1,6 @@
 package org.example.calendar.controller.schedule;
 
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.example.calendar.dto.schedule.ScheduleRequestDto;
 import org.example.calendar.dto.schedule.ScheduleResponseDto;
@@ -11,6 +12,7 @@ import org.example.calendar.service.schedule.ScheduleService;
 import org.example.calendar.service.user.UserService;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 
 
@@ -51,7 +53,7 @@ public class ScheduleController {
     }
 
     @PostMapping
-    public ResponseEntity<ScheduleResponseDto> saveSchedule(@RequestBody ScheduleRequestDto scheduleRequestDto){
+    public ResponseEntity<ScheduleResponseDto> saveSchedule(@Valid @RequestBody ScheduleRequestDto scheduleRequestDto){
 
         // 유저 이름을 가져오면서 userId에 해당하는 유저가 존재하는지 확인
         String username = userService.getUsernameByUserId(scheduleRequestDto.getUserId());

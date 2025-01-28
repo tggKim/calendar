@@ -1,5 +1,6 @@
 package org.example.calendar.controller.user;
 
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.example.calendar.dto.user.UserRequestDto;
 import org.example.calendar.dto.user.UserResponseDto;
@@ -25,7 +26,7 @@ public class UserController {
     }
 
     @PostMapping
-    public ResponseEntity<UserResponseDto> saveUser(@RequestBody UserRequestDto userRequestDto){
+    public ResponseEntity<UserResponseDto> saveUser(@Valid  @RequestBody UserRequestDto userRequestDto){
         User savedUser = userService.saveUser(userRequestDto.toUser());
         return new ResponseEntity<>(new UserResponseDto(savedUser), HttpStatus.OK);
     }
