@@ -440,3 +440,80 @@
 - 위에서 설명한 파라미터들을 섞어서 사용이 가능합니다
 
 - 예로 /api/schedules?page=1&size=2&updatedDate=1999-05-11&userid=3&sort=id.desc 처럼 모든 파라미터를 사용할 수도 있고 원하는 파라미터를 적용해서 자신만의 기준으로 목록을 가져올 수 있습니다.
+
+## 일정 수정
+
+**/api/schedules/{id} PATCH 요청**
+
+<details>
+  <summary>Request</summary>
+  
+  ```
+  {
+    "todo" : "할 일",
+    "username" : "1",
+    "password" : "aaa"
+  }
+  ```
+- todo -> 할 일
+- username -> 유저 이름
+- password -> 비밀번호
+
+</details>
+
+<details>
+<summary>Response</summary>
+  
+성공
+```
+{
+    "id": 1,
+    "todo": "할일 업데이트",
+    "username": "이름 수정",
+    "createdDate": "2000-04-29 00:00:00",
+    "updatedDate": "2025-01-28 19:23:48"
+}
+```
+- id -> 일정 식별자
+- todo -> 할 일
+- username -> 유저 이름
+- createDate -> 일정 생성일
+- updatedDate -> 일정 수정일
+
+실패
+```
+{
+  "todo": "할 일은 필수 입력 값입니다."
+}
+```
+- todo는 필수로 입력 해야됩니다.
+
+```
+{
+  "todo": "최대 200자 까지 허용됩니다."
+}
+```
+- todo는 최대 200자 까지 입력이 가능합니다.
+
+```
+{
+  "password": "비밀번호는 필수 입력 값입니다."
+}
+```
+- password는 필수로 입력 해야됩니다.
+
+```
+{
+  "message": "userId에 해당하는 유저가 없습니다."
+}
+```
+- 존재하지 않는 유저의 userId를 전달하면 오류가 발생합니다.
+
+```
+{
+    "message": "비밀번호가 잘못되었습니다."
+}
+```
+- 비밀번호가 일치하지 않으면 오류가 발생합니다.
+</details>
+
