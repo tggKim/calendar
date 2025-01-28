@@ -68,7 +68,7 @@ public class ScheduleController {
                 .updatedDate(savedSchedule.getUpdatedDate())
                 .build();
 
-        return new ResponseEntity<>(scheduleResponseDto, HttpStatus.OK);
+        return new ResponseEntity<>(scheduleResponseDto, HttpStatus.CREATED);
     }
 
     // 일부 수정이어서 patch 메서드 사용, 그리고 삭제에서 post 메서드를 사용해서 patch 메서드 사용
@@ -103,7 +103,7 @@ public class ScheduleController {
 
     // 삭제시 요청 메시지 body에 비밀번호를 담아야 해서 post 메서드 사용
     @PostMapping("/{id}")
-    public ResponseEntity deleteSchedule(@PathVariable("id") Long id, @RequestBody DeleteScheduleRequestDto deleteScheduleRequestDto){
+    public ResponseEntity<Void> deleteSchedule(@PathVariable("id") Long id, @RequestBody DeleteScheduleRequestDto deleteScheduleRequestDto){
 
         // 일정이 존재하는지, 비밀번호가 일치하는지 검증
         scheduleService.validatePassword(id, deleteScheduleRequestDto.getPassword());
@@ -111,7 +111,7 @@ public class ScheduleController {
         // 일정 삭제
         scheduleService.deleteScheduleById(id);
 
-        return new ResponseEntity(HttpStatus.OK);
+        return new ResponseEntity<>(HttpStatus.NO_CONTENT);
 
     }
 }
