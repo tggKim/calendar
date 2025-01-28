@@ -73,7 +73,7 @@ public class ScheduleController {
 
     // 일부 수정이어서 patch 메서드 사용, 그리고 삭제에서 post 메서드를 사용해서 patch 메서드 사용
     @PatchMapping("/{id}")
-    public ResponseEntity<ScheduleResponseDto> updateSchedule(@PathVariable("id") Long id, @RequestBody UpdateScheduleRequestDto updateScheduleRequestDto){
+    public ResponseEntity<ScheduleResponseDto> updateSchedule(@PathVariable("id") Long id,@Valid @RequestBody UpdateScheduleRequestDto updateScheduleRequestDto){
 
         // 일정이 존재하는지 비밀번호가 일치하는지 검증
         scheduleService.validatePassword(id, updateScheduleRequestDto.getPassword());
