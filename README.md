@@ -378,4 +378,65 @@
 
 <hr>
 
+**/api/schedules/page=[페이지 번호]&size=[한 페이지당 크기]**
 
+<details>
+<summary>Request</summary>
+  
+- page와 size 두 개의 파라미터를 모두 입력해야 됩니다.
+
+</details>
+
+<details>
+<summary>Response</summary>
+
+성공
+```
+[
+    {
+        "id": 1,
+        "todo": "할 일",
+        "username": "이름 업테이트",
+        "createdDate": "2000-04-29 00:00:00",
+        "updatedDate": "2025-05-11 00:00:00"
+    },
+    {
+        "id": 2,
+        "todo": "할 일2",
+        "username": "이름 업테이트",
+        "createdDate": "2000-04-30 00:00:00",
+        "updatedDate": "2025-05-12 00:00:00"
+    },
+    {
+        "id": 3,
+        "todo": "할 일3",
+        "username": "이름 업테이트",
+        "createdDate": "2000-04-27 00:00:00",
+        "updatedDate": "2025-05-13 00:00:00"
+    }
+]
+```
+- id -> 일정 식별자
+- todo -> 할 일
+- username -> 유저 이름
+- createDate -> 일정 생성일
+- updatedDate -> 일정 수정일
+- 현재 예시에서는 /api/schedules?page=1&size=3로 요청한 결과입니다.
+
+실패
+```
+{
+    "message": "페이징 형식이 올바르지 않습니다. size는 -1보다 크고, page는 1이상 입니다."
+}
+```
+- page와 size파라미터를 모두 입력하지 않으면 페이징에 대한 요청은 무시됩니다.
+- size는 0이상이어야 하며 page는 1이상 이어야 합니다.
+</details>
+
+<hr>
+
+**파라미터를 조합해서 일정 목록 얻기**
+
+- 위에서 설명한 파라미터들을 섞어서 사용이 가능합니다
+
+- 예로 /api/schedules?page=1&size=2&updatedDate=1999-05-11&userid=3&sort=id.desc 처럼 모든 파라미터를 사용할 수도 있고 원하는 파라미터를 적용해서 자신만의 기준으로 목록을 가져올 수 있습니다.
