@@ -7,4 +7,5 @@
 
 ### ERD
 
-![image](https://github.com/user-attachments/assets/ec10e5bd-0921-4571-8b60-4ae3b48bd85d)
+![image](https://github.com/user-attachments/assets/c1489ef6-574d-4f41-96b1-fe9554c7ac4e)
+
