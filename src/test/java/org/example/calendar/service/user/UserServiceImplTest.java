@@ -2,6 +2,7 @@ package org.example.calendar.service.user;
 
 import org.assertj.core.api.Assertions;
 import org.example.calendar.entity.User;
+import org.example.calendar.exception.Exception404;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -33,7 +34,7 @@ class UserServiceImplTest {
         Assertions.assertThat(findUser.getCreatedDate()).isEqualTo(savedUser.getCreatedDate());
         Assertions.assertThat(findUser.getUpdatedDate()).isEqualTo(savedUser.getUpdatedDate());
 
-        Assertions.assertThatThrownBy(() -> service.findUserById(Long.MAX_VALUE)).isInstanceOf(NoSuchElementException.class);
+        Assertions.assertThatThrownBy(() -> service.findUserById(Long.MAX_VALUE)).isInstanceOf(Exception404.class);
     }
 
     @Test
@@ -50,7 +51,7 @@ class UserServiceImplTest {
 
         Assertions.assertThat(findUsername).isEqualTo("테스트 유저");
 
-        Assertions.assertThatThrownBy(() -> service.getUsernameByUserId(Long.MAX_VALUE)).isInstanceOf(NoSuchElementException.class);
+        Assertions.assertThatThrownBy(() -> service.getUsernameByUserId(Long.MAX_VALUE)).isInstanceOf(Exception404.class);
     }
 
     @Test

@@ -3,6 +3,8 @@ package org.example.calendar.service.schedule;
 import org.assertj.core.api.Assertions;
 import org.example.calendar.entity.Schedule;
 import org.example.calendar.entity.User;
+import org.example.calendar.exception.Exception401;
+import org.example.calendar.exception.Exception404;
 import org.example.calendar.page.Paging;
 import org.example.calendar.repository.user.UserRepository;
 import org.junit.jupiter.api.Test;
@@ -146,7 +148,7 @@ class ScheduleServiceImplTest {
 
         service.deleteScheduleById(savedSchedule.getId());
 
-        Assertions.assertThatThrownBy(() -> service.findScheduleById(savedSchedule.getId())).isInstanceOf(NoSuchElementException.class);
+        Assertions.assertThatThrownBy(() -> service.findScheduleById(savedSchedule.getId())).isInstanceOf(Exception404.class);
     }
 
     // userId 가져오기 테스트
@@ -194,10 +196,10 @@ class ScheduleServiceImplTest {
 
         Assertions.assertThat(service.validatePassword(savedSchedule.getId(), schedule.getPassword())).isTrue();
 
-        Assertions.assertThatThrownBy(() -> service.validatePassword(savedSchedule.getId(), "틀린 비밀번호")).isInstanceOf(IllegalArgumentException.class);
+        Assertions.assertThatThrownBy(() -> service.validatePassword(savedSchedule.getId(), "틀린 비밀번호")).isInstanceOf(Exception401.class);
 
         service.deleteScheduleById(savedSchedule.getId());
 
-        Assertions.assertThatThrownBy(() -> service.validatePassword(savedSchedule.getId(), schedule.getPassword())).isInstanceOf(NoSuchElementException.class);
+        Assertions.assertThatThrownBy(() -> service.validatePassword(savedSchedule.getId(), schedule.getPassword())).isInstanceOf(Exception404.class);
     }
 }
