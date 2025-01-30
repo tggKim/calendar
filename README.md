@@ -517,3 +517,48 @@
 - 비밀번호가 일치하지 않으면 오류가 발생합니다.
 </details>
 
+## 일정 삭제
+
+**/api/schedules/{id} POST 요청**
+
+<details>
+<summary>Request</summary>
+  
+```
+{
+  "password" : "비밀번호"
+}
+```
+- password -> 비밀번호
+
+</details>
+
+<details>
+<summary>Response</summary>
+  
+성공
+204 No Content가 응답으로 돌아옵니다.
+
+실패
+```
+{
+    "message": "id에 해당하는 일정이 없습니다."
+}
+```
+- 존재하지 않는 일정의 id를 입력하면 오류가 발생합니다. 
+
+```
+{
+  "password": "비밀번호는 필수 입력 값입니다."
+}
+```
+- password는 필수로 입력 해야됩니다.
+
+```
+{
+  "message": "비밀번호가 잘못되었습니다."
+}
+```
+- 비밀번호가 일치하지 않으면 오류가 발생합니다.
+</details>
+
