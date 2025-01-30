@@ -103,7 +103,7 @@ public class ScheduleController {
 
     // 삭제시 요청 메시지 body에 비밀번호를 담아야 해서 post 메서드 사용
     @PostMapping("/{id}")
-    public ResponseEntity<Void> deleteSchedule(@PathVariable("id") Long id, @RequestBody DeleteScheduleRequestDto deleteScheduleRequestDto){
+    public ResponseEntity<Void> deleteSchedule(@PathVariable("id") Long id,@Valid @RequestBody DeleteScheduleRequestDto deleteScheduleRequestDto){
 
         // 일정이 존재하는지, 비밀번호가 일치하는지 검증
         scheduleService.validatePassword(id, deleteScheduleRequestDto.getPassword());
