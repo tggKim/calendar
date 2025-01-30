@@ -562,3 +562,87 @@
 - 비밀번호가 일치하지 않으면 오류가 발생합니다.
 </details>
 
+## 유저 등록
+
+**/api/users POST 요청**
+
+<details>
+<summary>Request</summary>
+  
+```
+{
+    "username" : "새로운 유저",
+    "email" : "rl123456@hanmail.net"
+}
+```
+- username -> 유저 이름
+- email -> 유저 이메일
+
+</details>
+
+<details>
+<summary>Response</summary>
+  
+성공
+```
+{
+    "userId": 124,
+    "username": "새로운 유저1",
+    "email": "rl123456@hanmail.net",
+    "createdDate": "2025-01-30 13:18:39",
+    "updatedDate": "2025-01-30 13:18:39"
+}
+```
+- userId -> 유저 식별자
+- username -> 유저  이름
+- email -> 유저 이메일
+- createDate -> 유저 생성일
+- updatedDate -> 유 수정일
+
+실패
+```
+{
+    "email": "이메일 형식에 맞지 않습니다."
+}
+```
+- 이메일 형식에 맞지 않으면 오류가 발생합니다.
+</details>
+
+## 유저 단건 조회
+
+**/api/users{userId} GET 요청**
+
+<details>
+<summary>Request</summary>
+  
+PathVariable로 userId를 명시하면 됩니다.
+
+</details>
+
+<details>
+<summary>Response</summary>
+  
+성공
+```
+{
+    "userId": 125,
+    "username": "새로운 유저1",
+    "email": "rle@hanmail.net",
+    "createdDate": "2025-01-30 13:32:06",
+    "updatedDate": "2025-01-30 13:32:06"
+}
+```
+- userId -> 유저 식별자
+- username -> 유저  이름
+- email -> 유저 이메일
+- createDate -> 유저 생성일
+- updatedDate -> 유 수정일
+
+실패
+```
+{
+    "message": "userId에 해당하는 유저가 없습니다."
+}
+```
+- 존재하지 않는 유저의 userId를 입력하면 오류가 발생합니다.
+</details>
