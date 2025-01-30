@@ -1,5 +1,13 @@
 # 일정 관리 앱 calendar
 
+### 개발 환경
+<div>
+  <img src="https://img.shields.io/badge/java-007396?style=for-the-badge&logo=java&logoColor=white"> 
+  <img src="https://img.shields.io/badge/mysql-4479A1?style=for-the-badge&logo=mysql&logoColor=white">
+  <img src="https://img.shields.io/badge/spring-6DB33F?style=for-the-badge&logo=spring&logoColor=white">
+  <img src="https://img.shields.io/badge/Gradle-02303A.svg?style=for-the-badge&logo=Gradle&logoColor=white">
+</div>
+
 ### API 명세서
 
 ![image](https://github.com/user-attachments/assets/0c3879b7-d2fa-4b9e-8333-cc328dd4817c)
