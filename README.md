@@ -457,7 +457,7 @@ userId에 해당하는 일정이 없을 경우
   ```
   {
     "todo" : "할 일",
-    "username" : "1",
+    "username" : "수정 이름",
     "password" : "aaa"
   }
   ```
