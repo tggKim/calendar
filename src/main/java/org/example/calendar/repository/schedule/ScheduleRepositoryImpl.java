@@ -94,9 +94,7 @@ public class ScheduleRepositoryImpl implements ScheduleRepository {
             sql += " limit " + paging.getSize() + " offset " + (paging.getPage() - 1) * paging.getSize();
         }
 
-        System.out.println(sql);
         return jdbcTemplate.query(sql,scheduleRowMapper());
-
     }
 
     // 결과를 ScheduleResponseDto 객체에 매핑하기위한 매퍼관련 함수
