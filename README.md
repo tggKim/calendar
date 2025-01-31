@@ -670,3 +670,7 @@ PathVariable로 userId를 명시하면 됩니다.
 ```
 - 존재하지 않는 유저의 userId를 입력하면 오류가 발생합니다.
 </details>
+
+# 트러블 슈팅
+
+https://velog.io/@tgg/%EC%9D%BC%EC%A0%95-%EA%B4%80%EB%A6%AC-%EC%95%A0%ED%94%8C%EB%A6%AC%EC%BC%80%EC%9D%B4%EC%85%98-%EC%84%9C%EB%B2%84-%ED%8A%B8%EB%9F%AC%EB%B8%94-%EC%8A%88%ED%8C%85
