@@ -543,7 +543,7 @@ userId에 해당하는 일정이 없을 경우
 <summary>Response</summary>
   
 성공
-204 No Content가 응답으로 돌아옵니다.
+- 204 No Content가 응답으로 돌아옵니다.
 
 실패
 ```
