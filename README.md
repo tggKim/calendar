@@ -134,7 +134,7 @@
 <details>
 <summary>Request</summary>
   
-- 파라미터로 유저의 식별자인 userId를 명시하면 된다.
+/api/schedules 로 GET 요청을 하면 된다.
 
 </details>
 
